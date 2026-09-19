@@ -1,0 +1,37 @@
+{
+    "name": "com.sandlada",
+    "type": "module",
+    "version": "0.0.1",
+    "private": true,
+    "author": "sandlada team & bre97-web",
+    "license": "MIT",
+    "scripts": {
+        "dev": "astro dev",
+        "build": "astro build",
+        "preview": "astro preview",
+        "astro": "astro"
+    },
+    "dependencies": {
+        "@astrojs/mdx": "^4.3.0",
+        "@astrojs/rss": "^4.0.12",
+        "@astrojs/sitemap": "^3.4.1",
+        "@astrojs/vue": "^5.1.0",
+        "@fontsource-variable/noto-sans": "^5.2.7",
+        "@glare-labs/material-tokens-generator": "^0.2.1",
+        "@material/material-color-utilities": "^0.3.0",
+        "@material/web": "^2.3.0",
+        "@nanostores/persistent": "^1.0.0",
+        "@sandlada/material-design-css": "^2.3.0-20250927.c",
+        "astro": "^5.15.1",
+        "com.sandlada.shared": "^0.0.1",
+        "nanostores": "^1.0.1",
+        "sharp": "^0.34.2",
+        "typescript": "^5.9.3",
+        "vue": "^3.5.17"
+    },
+    "devDependencies": {
+        "@material-design-icons/svg": "^0.14.15",
+        "autoprefixer": "^10.4.21",
+        "vite": "^7.1.10"
+    }
+}

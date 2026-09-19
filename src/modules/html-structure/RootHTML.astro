@@ -1,0 +1,43 @@
+---
+import "@fontsource-variable/noto-sans"
+import "@styles/global.css"
+import PageMeta, { type IPageMetaProps } from "./PageMeta.astro"
+
+type Props = IPageMetaProps
+
+const props = Astro.props
+---
+
+<!doctype html>
+<html lang={props.language ?? "en"}>
+    <head>
+        <PageMeta {...props} />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>
+
+<script>
+    import { isDark } from "../../stores/is-dark"
+
+    document.addEventListener("astro:before-swap", () => {
+        const pageLoader = document.querySelector(`#page-loader`)
+        pageLoader?.classList.remove("hide")
+        pageLoader?.classList.add("show")
+    })
+    document.addEventListener("astro:page-load", () => {
+        const pageLoader = document.querySelector(`#page-loader`)
+        pageLoader?.classList.remove("show")
+        pageLoader?.classList.add("hide")
+    })
+    document.addEventListener("astro:page-load", () => {
+        if (isDark.get() === "true") {
+            document.documentElement.setAttribute("dark", "")
+        } else {
+            if (document.documentElement.hasAttribute("dark")) {
+                document.documentElement.removeAttribute("dark")
+            }
+        }
+    })
+</script>

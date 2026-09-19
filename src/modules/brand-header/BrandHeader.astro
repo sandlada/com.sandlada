@@ -1,0 +1,94 @@
+---
+import HeaderLink from "./HeaderLink.astro"
+import LightModeSvg from "@material-design-icons/svg/round/light_mode.svg?raw"
+import DarkModeSvg from "@material-design-icons/svg/round/dark_mode.svg?raw"
+---
+
+<header class="brand-header">
+    <nav class="navigation-links">
+        <HeaderLink href="/">Sandlada</HeaderLink>
+        <HeaderLink href="/products">Products</HeaderLink>
+    </nav>
+
+    <div class="actions">
+        <md-icon-button id="header-theme-toggle">
+            <md-icon id="header-theme-toggle-light-icon" set:html={LightModeSvg} />
+            <md-icon id="header-theme-toggle-dark-icon" set:html={DarkModeSvg} />
+        </md-icon-button>
+    </div>
+</header>
+
+<script>
+    import "@material/web/icon/icon.js"
+    import "@material/web/iconbutton/icon-button.js"
+</script>
+
+<script>
+    import { isDark } from "../../stores/is-dark"
+    document.addEventListener("astro:page-load", () => {
+        const themeToggleButton = document.querySelector("#header-theme-toggle")
+
+        const setIcon = (isDarkProp: boolean | null) => {
+            const lightIcon = document.querySelector("#header-theme-toggle-light-icon")
+            const darkIcon = document.querySelector("#header-theme-toggle-dark-icon")
+
+            if (isDarkProp) {
+                lightIcon?.classList.add("hidden")
+                darkIcon?.classList.remove("hidden")
+            } else {
+                lightIcon?.classList.remove("hidden")
+                darkIcon?.classList.add("hidden")
+            }
+        }
+
+        const setRootAttribute = (isDarkProp: boolean) => {
+            if (isDarkProp) {
+                document.documentElement.setAttribute("dark", "")
+            } else {
+                document.documentElement.removeAttribute("dark")
+            }
+        }
+
+        setIcon(!(isDark.get() === "true"))
+        setRootAttribute(Boolean(isDark.get()))
+
+        themeToggleButton?.addEventListener("click", () => {
+            if (isDark.get() === "false") {
+                setRootAttribute(true)
+                setIcon(false)
+                isDark.set("true")
+            } else {
+                setRootAttribute(false)
+                setIcon(true)
+                isDark.set("false")
+            }
+        })
+    })
+</script>
+
+<style>
+    .brand-header {
+        display: flex;
+        align-items: center;
+        padding-inline-start: 12px;
+        padding-inline-end: 12px;
+        gap: 12px;
+        height: 56px;
+
+        & > .navigation-links {
+            display: flex;
+            flex-grow: 1;
+            gap: 12px;
+        }
+
+        & > .actions {
+            flex-grow: 0;
+            display: flex;
+            justify-content: end;
+
+            & .hidden {
+                display: none;
+            }
+        }
+    }
+</style>

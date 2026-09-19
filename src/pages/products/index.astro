@@ -1,0 +1,79 @@
+---
+import BrandFooter from "@modules/brand-footer/BrandFooter.astro"
+import BrandHeader from "@modules/brand-header/BrandHeader.astro"
+import RootHTML from "@modules/html-structure/RootHTML.astro"
+import { Consts } from "../../../../com.sandlada.shared/consts"
+---
+
+<RootHTML title="Products - Sandlada" description="Try the open source projects provided by the sandlada team. All projects are open sourced under the MIT protocol. If you are a fan of Material Design, don't miss it.">
+    <BrandHeader />
+    <span aria-hidden="true" class="background"></span>
+
+    <div class="page-container">
+        <div class="hero" id="hero">
+            <h1 class="emphasized-display-medium">Products</h1>
+            <h2 class="headline-small">Try our open source projects, all licensed under the MIT license.</h2>
+        </div>
+
+        <div class="collection-panel">
+            <div class="card tertiary-background">
+                <p class="subtitle label-medium">@sandlada/vue-mdc</p>
+                <h3 class="title headline-medium">Vue-MDC</h3>
+                <p class="body-large">A Material Design 3 style Vue component library written specifically for Vue3.</p>
+                <div class="actions">
+                    <md-filled-tonal-button target="_blank" href={Consts.repo.VueMDC.githubLink}>Learn More</md-filled-tonal-button>
+                </div>
+            </div>
+
+            <div class="card tertiary-background">
+                <p class="subtitle label-medium">@sandlada/material-design-css</p>
+                <h3 class="title headline-medium">Material Design CSS</h3>
+                <p class="body-large">A simple CSS solution for those who often need to import a series of theme files. Provides colors, typography, shapes and pre-built theme CSS files.</p>
+                <div class="actions">
+                    <md-filled-tonal-button target="_blank" href={Consts.repo.MaterialDesignCSS.githubLink}>Learn More</md-filled-tonal-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <BrandFooter />
+</RootHTML>
+
+<script>
+    import "@material/web/button/filled-tonal-button"
+</script>
+
+<style>
+    .background {
+        position: absolute;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        inset: 0;
+        --size: 256px;
+        height: var(--size);
+        width: var(--size);
+        background-color: var(--md-sys-color-tertiary-container);
+        filter: blur(var(--size));
+        z-index: -1;
+    }
+
+    .hero {
+        position: relative;
+        display: block;
+        margin-left: 24px;
+        padding-top: 56px;
+        margin-bottom: 96px;
+        & > h2 {
+            margin-top: 12px;
+        }
+    }
+
+    .collection-panel {
+        display: flex;
+        flex-direction: column;
+        & .subtitle {
+            color: var(--md-sys-color-on-tertiary-container);
+        }
+    }
+</style>

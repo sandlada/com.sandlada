@@ -1,0 +1,108 @@
+---
+import BrandFooter from "@modules/brand-footer/BrandFooter.astro"
+import BrandHeader from "@modules/brand-header/BrandHeader.astro"
+import RootHTML from "@modules/html-structure/RootHTML.astro"
+import VueMdcLogo from "com.sandlada.shared/components/VueMdcLogo.astro"
+---
+
+<RootHTML title="Sandlada - A team of one, one pure passion" description="Sandlada, which means sandbox, is a personal open source team founded by Kai-Orion, a front-end development enthusiast.">
+    <BrandHeader />
+
+    <span aria-hidden="true" class="background"></span>
+
+    <div class="page-container">
+        <div class="hero" id="hero">
+            <h1 class="title">Sandlada</h1>
+            <h2 class="subtitle">A team of one - One pure passion</h2>
+        </div>
+
+        <div class="card secondary-background section">
+            <h3 class="title headline-medium"># Sandlada's Philosophy</h3>
+            <p class="content body-large">The name Sandlada is inspired by a Swedish word: SANDLÅDA.</p>
+            <p class="content body-large">
+                The original meaning of this word is "Sandbox". It depicts an innocent picture: a safe area where you can build castles, dig tunnels, and put your imagination into practice without restraint. Here, creation is free,
+                experimentation is encouraged, and every restart is not a failure, but the beginning of a new round of creation.
+            </p>
+            <p class="content body-large">
+                For developers, "sandbox" is also a core concept. It represents a controlled and isolated test environment to ensure that all codes are rigorously tested before delivery to ensure the stability and security of the software;
+                at the same time, "sandbox" is also a paradise for innovation and exploration, where developers can freely express their creativity, try new technologies, and breed the next great idea without worrying about destroying the
+                existing system. This is the original intention and meaning of the name Sandlada. It is my personal sandbox for Kai Orion to explore technology and incubate new ideas.
+            </p>
+        </div>
+
+        <div class="card secondary-background section">
+            <h3 class="title headline-medium"># Vue-MDC</h3>
+            <div class="grow grid grid-cols-6 relative">
+                <p class="content body-large col-span-4">Try our Vue3 component library based on the latest Material Design 3 design specifications that we are working on. Currently in development.</p>
+                <span aria-hidden="true" class="absolute right-0 -z-[1] col-span-2" style="--logo-size: 48px;--logo-margin:32px;--logo-left-block-left: 0%;--logo-right-block-right: 0%;">
+                    <VueMdcLogo />
+                </span>
+            </div>
+            <div class="actions">
+                <md-filled-tonal-button target="_blank" href="https://vue-mdc.sandlada.com">Learn More</md-filled-tonal-button>
+                <md-text-button target="_blank" href="https://stackblitz.com/edit/vitejs-vite-vwfsxwrc?file=src%2Fcomponents%2FComps.vue">Try Vue-MDC Online</md-text-button>
+            </div>
+        </div>
+    </div>
+
+    <BrandFooter />
+</RootHTML>
+
+<script>
+    import "@material/web/button/filled-tonal-button.js"
+    import "@material/web/button/text-button.js"
+</script>
+
+<style>
+    .background {
+        position: absolute;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        inset: 0;
+        --size: 256px;
+        height: var(--size);
+        width: var(--size);
+        background-color: var(--md-sys-color-primary-container);
+        filter: blur(var(--size));
+        z-index: -1;
+    }
+
+    .hero {
+        position: relative;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 56px;
+        margin-bottom: 96px;
+
+        @media (width >= 640px) {
+            padding-top: 64px;
+            margin-bottom: 128px;
+        }
+
+        & > .title {
+            font-size: 56px;
+            @media (width >= 560px) {
+                font-size: 72px;
+            }
+            @media (width >= 640px) {
+                font-size: 96px;
+            }
+            font-weight: 900;
+            color: var(--md-sys-color-on-primary-container);
+        }
+        & > .subtitle {
+            font-size: 18px;
+            @media (width >= 560px) {
+                font-size: 22px;
+            }
+            @media (width >= 640px) {
+                font-size: 28px;
+            }
+            font-weight: 700;
+            color: var(--md-sys-color-on-primary-container);
+        }
+    }
+</style>
