@@ -3,9 +3,63 @@ import BrandFooter from "@modules/brand-footer/BrandFooter.astro"
 import BrandHeader from "@modules/brand-header/BrandHeader.astro"
 import RootHTML from "@modules/html-structure/RootHTML.astro"
 import { Consts } from "@sandlada/consts.js"
+
+const siteUrl = "https://sandlada.com"
+const pageTitle = "Sandlada – Material Design UI, TS Libraries & Themes"
+const pageDescription =
+    "Sandlada (sandbox) is an open-source team by Kai Orion building Material Design 3 UI libraries, TypeScript utilities, VSCode, Zed and OpenCode themes, and color tools."
+
+const productList = [
+    { name: "MDC", description: "An open source component library that follows the Material Design 3 design specifications.", url: Consts.Repo.MDC.GitHubLink },
+    { name: "Material Design CSS", description: "A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.", url: Consts.Repo.MaterialDesignCSS.GitHubLink },
+    { name: "MDK", description: "A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.", url: Consts.Repo.MDK.GitHubLink },
+    { name: "Result", description: "A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.", url: Consts.Repo.Result.GitHubLink },
+    { name: "Breakpoint", description: "Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.", url: Consts.Repo.Breakpoint.GitHubLink },
+    { name: "Document Context", description: "A function-first, DOM-anchored IoC container and reactive state management library for browsers.", url: Consts.Repo.DocumentContext.GitHubLink },
+    { name: "MCU Helper", description: "High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.", url: Consts.Repo.MCUHelper.GitHubLink },
+    { name: "Material Theme CLI", description: "Material Design CLI for generating theme tokens and serialized color outputs from a source color.", url: Consts.Repo.MaterialThemeCLI.GitHubLink },
+    { name: "Material Design 3 Theme for VSCode", description: "Material Design 3 theme for VSCode.", url: Consts.Repo.VSCodeMaterialTheme.GitHubLink },
+    { name: "OpenCode Material Theme", description: "Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.", url: Consts.Repo.OpenCodeMaterialTheme.GitHubLink },
+    { name: "Zed Material Theme", description: "Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.", url: Consts.Repo.ZedMaterialTheme.GitHubLink },
+    { name: "Material VSCode Extensions", description: "VSCode snippets: Material Web Snippets and Material Design CSS Snippets.", url: Consts.Repo.MaterialVSCodeExtensions.GitHubLink },
+]
+
+const structuredData = [
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Sandlada",
+        url: siteUrl,
+        logo: `${siteUrl}/sandlada.svg`,
+        image: `${siteUrl}/sandlada-cover.png`,
+        description: pageDescription,
+        founder: { "@type": "Person", name: "Kai Orion", url: Consts.Member.KaiOrion.GitHubProfileLink },
+        sameAs: [Consts.Social.Twitter.Link, Consts.Social.GitHub.Link, Consts.Social.Npm.Link],
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Sandlada",
+        url: siteUrl,
+        inLanguage: "en",
+        description: pageDescription,
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Sandlada open source projects",
+        itemListElement: productList.map((product, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: product.name,
+            description: product.description,
+            url: product.url,
+        })),
+    },
+]
 ---
 
-<RootHTML title="Sandlada - A team of one, one pure passion" description="Sandlada, which means sandbox, is a personal open source team founded by Kai-Orion, a front-end development enthusiast.">
+<RootHTML title={pageTitle} description={pageDescription} structuredData={structuredData}>
 
     <div class="width-container">
         <BrandHeader />
@@ -13,13 +67,19 @@ import { Consts } from "@sandlada/consts.js"
 
     <div class="hero" id="hero">
         <h1 class="title">Sandlada</h1>
-        <span class="subtitle">The name Sandlada is inspired by a Swedish word SANDLÅDA.</span>
+        <p class="subtitle">The name Sandlada is inspired by a Swedish word SANDLÅDA.</p>
+        <p class="visually-hidden">Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript utilities, and VSCode, Zed and OpenCode themes.</p>
+        <nav class="category-nav" aria-label="Product categories">
+            <a href="#ui-library">UI Library</a>
+            <a href="#ts-js-library">TS / JS Library</a>
+            <a href="#extensions">Extensions</a>
+        </nav>
     </div>
 
     <!-- UI Library -->
-    <section class="horizontal-list-wrapper">
+    <section class="horizontal-list-wrapper" id="ui-library" aria-labelledby="ui-library-title">
         <div class="list-meta">
-            <h2 class="list-title">UI Library</h2>
+            <h2 class="list-title" id="ui-library-title">UI Library</h2>
             <p class="list-desc">Component library, CSS library and design tokens.</p>
         </div>
         <div class="horizontal-list">
@@ -28,8 +88,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">MDC</h3>
                 <p class="product-desc">An open source component library that follows the Material Design 3 design specifications.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.MDC.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.MDC.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDC.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDC.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -37,8 +97,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">Material Design CSS</h3>
                 <p class="product-desc">A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.MaterialDesignCSS.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.MaterialDesignCSS.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -46,17 +106,17 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">MDK</h3>
                 <p class="product-desc">A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.MDK.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.MDK.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDK.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDK.NpmLink}>NPM</a>
                 </div>
             </article>
         </div>
     </section>
 
     <!-- TS/JS Library -->
-    <section class="horizontal-list-wrapper">
+    <section class="horizontal-list-wrapper" id="ts-js-library" aria-labelledby="ts-js-library-title">
         <div class="list-meta">
-            <h2 class="list-title">TS / JS Library</h2>
+            <h2 class="list-title" id="ts-js-library-title">TS / JS Library</h2>
             <p class="list-desc">Framework-agnostic utilities written in TypeScript.</p>
         </div>
         <div class="horizontal-list">
@@ -65,8 +125,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">Result</h3>
                 <p class="product-desc">A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.Result.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.Result.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Result.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Result.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -74,8 +134,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">Breakpoint</h3>
                 <p class="product-desc">Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.Breakpoint.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.Breakpoint.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -83,8 +143,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">Document Context</h3>
                 <p class="product-desc">A function-first, DOM-anchored IoC container and reactive state management library for browsers.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.DocumentContext.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.DocumentContext.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -92,8 +152,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">MCU Helper</h3>
                 <p class="product-desc">High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.MCUHelper.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.MCUHelper.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -101,17 +161,17 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">Material Theme CLI</h3>
                 <p class="product-desc">Material Design CLI for generating theme tokens and serialized color outputs from a source color.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.MaterialThemeCLI.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.MaterialThemeCLI.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.NpmLink}>NPM</a>
                 </div>
             </article>
         </div>
     </section>
 
     <!-- Extensions -->
-    <section class="horizontal-list-wrapper">
+    <section class="horizontal-list-wrapper" id="extensions" aria-labelledby="extensions-title">
         <div class="list-meta">
-            <h2 class="list-title">Extensions</h2>
+            <h2 class="list-title" id="extensions-title">Extensions</h2>
             <p class="list-desc">Themes and VSCode plugins only.</p>
         </div>
         <div class="horizontal-list">
@@ -120,7 +180,7 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">{Consts.Repo.VSCodeMaterialTheme.DisplayName}</h3>
                 <p class="product-desc">Material Design 3 theme for VSCode.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.VSCodeMaterialTheme.GitHubLink}>GitHub</md-filled-tonal-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.VSCodeMaterialTheme.GitHubLink}>GitHub</a>
                 </div>
             </article>
             <article class="product">
@@ -128,8 +188,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">OpenCode Material Theme</h3>
                 <p class="product-desc">Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.OpenCodeMaterialTheme.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.OpenCodeMaterialTheme.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -137,8 +197,8 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">Zed Material Theme</h3>
                 <p class="product-desc">Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.ZedMaterialTheme.GitHubLink}>GitHub</md-filled-tonal-button>
-                    <md-text-button target="_blank" href={Consts.Repo.ZedMaterialTheme.NpmLink}>NPM</md-text-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.GitHubLink}>GitHub</a>
+                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.NpmLink}>NPM</a>
                 </div>
             </article>
             <article class="product">
@@ -146,7 +206,7 @@ import { Consts } from "@sandlada/consts.js"
                 <h3 class="product-title">Material VSCode Extensions</h3>
                 <p class="product-desc">VSCode snippets: Material Web Snippets and Material Design CSS Snippets.</p>
                 <div class="product-actions">
-                    <md-filled-tonal-button target="_blank" href={Consts.Repo.MaterialVSCodeExtensions.GitHubLink}>GitHub</md-filled-tonal-button>
+                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialVSCodeExtensions.GitHubLink}>GitHub</a>
                 </div>
             </article>
         </div>
@@ -160,11 +220,6 @@ import { Consts } from "@sandlada/consts.js"
 
 </RootHTML>
 
-<script>
-    import "@material/web/button/filled-tonal-button.js"
-    import "@material/web/button/text-button.js"
-</script>
-
 <style>
 
     .divider {
@@ -177,6 +232,18 @@ import { Consts } from "@sandlada/consts.js"
         max-width: 840px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     .hero {
@@ -211,6 +278,29 @@ import { Consts } from "@sandlada/consts.js"
         }
     }
 
+    .category-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 24px;
+
+        & > a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface-variant);
+            text-decoration: none;
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: 999px;
+            padding: 8px 16px;
+
+            &:hover {
+                color: var(--md-sys-color-on-secondary-container);
+                background-color: var(--md-sys-color-secondary-container);
+            }
+        }
+    }
+
     .horizontal-list-wrapper {
         position: relative;
         display: block;
@@ -219,6 +309,7 @@ import { Consts } from "@sandlada/consts.js"
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: auto 1fr;
+        scroll-margin-top: 16px;
         &::after {
             content: '';
             display: flex;
@@ -340,11 +431,38 @@ import { Consts } from "@sandlada/consts.js"
             align-items: center;
             gap: 8px;
             margin-top: 20px;
-            opacity: 0;
-        }
-        &:focus-within .product-actions,
-        &:hover .product-actions {
             opacity: 1;
+        }
+    }
+
+    .btn-tonal,
+    .btn-text {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .btn-tonal {
+        color: var(--md-sys-color-on-secondary-container);
+        background-color: var(--md-sys-color-secondary-container);
+
+        &:hover {
+            filter: brightness(0.96);
+        }
+    }
+
+    .btn-text {
+        color: var(--md-sys-color-primary);
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
         }
     }
 

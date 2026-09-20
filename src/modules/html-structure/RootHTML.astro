@@ -9,6 +9,11 @@ import SandladaIcon from "../../../public/sandlada.svg"
 
 interface Props extends IPageMeta {
     language?: string
+    twitterSite?: string
+    twitterCreator?: string
+    manifest?: string
+    appleTouchIcon?: string
+    structuredData?: Record<string, unknown> | Array<Record<string, unknown>>
 }
 
 const {
@@ -16,16 +21,21 @@ const {
     title,
     description,
     author = "Kai Orion",
-    keywords = "sandlada, kai-orion",
+    keywords = undefined,
     applicationName = "Sandlada",
     ogSiteName = "Sandlada",
     ogLocale,
     image = SandladaCoverImage,
-    imageAlt = "Sandlada.com Logo",
+    imageAlt = "Sandlada open source Material Design UI libraries and TypeScript tools",
     icon = SandladaIcon,
     url,
     themeColorLight = "#f9f9f9",
     themeColorDark = "#131313",
+    twitterSite = "@Sandlada_team",
+    twitterCreator = "@Sandlada_team",
+    manifest = "/site.webmanifest",
+    appleTouchIcon = "/apple-touch-icon.png",
+    structuredData,
     ...rest
 } = Astro.props
 
@@ -51,8 +61,13 @@ const resolvedOgLocale = ogLocale ?? (language === "en" ? "en-US" : language)
             url={resolvedUrl}
             themeColorLight={themeColorLight}
             themeColorDark={themeColorDark}
+            twitterSite={twitterSite}
+            twitterCreator={twitterCreator}
             {...rest}
         />
+        <link rel="manifest" href={manifest} />
+        <link rel="apple-touch-icon" href={appleTouchIcon} />
+        {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
         <ClientRouter />
     </head>
     <body>
