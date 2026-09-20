@@ -1,17 +1,14 @@
-@import "@sandlada/vue-mdc/css/ripple.css";
-@import "@sandlada/vue-mdc/css/focus-ring.css";
-@import "@sandlada/vue-mdc/css/elevation.css";
-@import "@sandlada/vue-mdc/css/icon.css";
-@import "@sandlada/vue-mdc/css/progress.css";
-
-@import "@sandlada/material-design-css/color.css";
-@import "@sandlada/material-design-css/prebuild-color-light-green.css";
-@import "@sandlada/material-design-css/typography.css";
-
-@layer reset, base, material-design-system.typography;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "@sandlada/material-design-css/preset.css";
+@import "@sandlada/material-design-css/prebuilt-colors/content/h150c60t50-2025.css";
+@import "@sandlada/material-design-css/typography/variables.css";
+@import "@sandlada/material-design-css/typography/utilities.css";
 
 @layer reset {
-
+    * {
+        box-sizing: border-box;
+    }
     h1,
     h2,
     h3,
@@ -49,25 +46,16 @@
         background-color: var(--md-sys-color-surface);
     }
 
-    :root:not([dark]) {
-        color-scheme: light;
-    }
-
-    :root[dark] {
-        color-scheme: dark;
-    }
-
     body {
-        padding: 0;
         margin: 0;
         font-family: "Noto Sans Variable", "Noto Sans", "Roboto", "Aptos", sans-serif;
-        position: relative;
     }
 
     astro-island {
         border-radius: inherit;
     }
 
+    [hidden],
     [invisible] {
         display: none;
     }
@@ -75,36 +63,6 @@
     * {
         scroll-behavior: smooth;
     }
-
-
-
-    .page-container {
-        box-sizing: border-box;
-        display: block;
-        min-height: calc(100svh - 56px);
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 16px;
-        padding-right: 16px;
-
-        @media (width >=640px) {
-            max-width: 640px;
-        }
-
-        @media (width >=768px) {
-            max-width: 768px;
-        }
-
-        @media (width >=1024px) {
-            max-width: 1024px;
-        }
-
-        @media (width >=1280px) {
-            max-width: 1280px;
-        }
-    }
-
-
 
 }
 

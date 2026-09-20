@@ -1,17 +1,59 @@
 ---
 import "@fontsource-variable/noto-sans"
-import "@styles/global.css"
-import PageMeta, { type IPageMetaProps } from "./PageMeta.astro"
+import "@styles/tailwind.css"
+import PageMeta from "@sandlada/astro-page-meta"
+import type { IPageMeta } from "@sandlada/astro-page-meta/types"
+import { ClientRouter } from "astro:transitions"
+import SandladaCoverImage from "../../../public/sandlada-cover.png"
+import SandladaIcon from "../../../public/sandlada.svg"
 
-type Props = IPageMetaProps
+interface Props extends IPageMeta {
+    language?: string
+}
 
-const props = Astro.props
+const {
+    language = "en",
+    title,
+    description,
+    author = "Kai Orion",
+    keywords = "sandlada, kai-orion",
+    applicationName = "Sandlada",
+    ogSiteName = "Sandlada",
+    ogLocale,
+    image = SandladaCoverImage,
+    imageAlt = "Sandlada.com Logo",
+    icon = SandladaIcon,
+    url,
+    themeColorLight = "#f9f9f9",
+    themeColorDark = "#131313",
+    ...rest
+} = Astro.props
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
+const resolvedUrl = url ?? canonicalUrl
+const resolvedOgLocale = ogLocale ?? (language === "en" ? "en-US" : language)
 ---
 
 <!doctype html>
-<html lang={props.language ?? "en"}>
+<html lang={language}>
     <head>
-        <PageMeta {...props} />
+        <PageMeta
+            title={title}
+            description={description}
+            author={author}
+            keywords={keywords}
+            applicationName={applicationName}
+            ogSiteName={ogSiteName}
+            ogLocale={resolvedOgLocale}
+            image={image}
+            imageAlt={imageAlt}
+            icon={icon}
+            url={resolvedUrl}
+            themeColorLight={themeColorLight}
+            themeColorDark={themeColorDark}
+            {...rest}
+        />
+        <ClientRouter />
     </head>
     <body>
         <slot />
