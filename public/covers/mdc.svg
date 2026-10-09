@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="MDC material component specimens on a green tonal background">
+  <!--
+    MDC product cover · 800×400
+    Palette: Sandlada MD3 dynamic scheme (h150c60)
+      primary #006e2c · primary-container #34a551 · primary-fixed #8bfa9b
+      secondary-container #c1eec0 · surface #eff6eb · outline-variant #bdcaba
+      tertiary #3e92f6 · tertiary-fixed #d5e3ff
+    Motif: component specimen sheet (buttons, switch, checkbox, radio,
+    slider, chips, icon button, FAB, progress) floating over tonal blobs.
+  -->
+  <defs>
+    <linearGradient id="mdc-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2f8ef"/>
+      <stop offset="0.55" stop-color="#e2f1de"/>
+      <stop offset="1" stop-color="#c9eac6"/>
+    </linearGradient>
+    <radialGradient id="mdc-blob-green" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8bfa9b" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#8bfa9b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mdc-blob-blue" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#3e92f6" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#3e92f6" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="mdc-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="3" fill="#006e2c" opacity="0.16"/>
+    </pattern>
+    <filter id="mdc-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+
+  <!-- backdrop -->
+  <rect width="800" height="400" fill="url(#mdc-bg)"/>
+  <rect x="548" y="0" width="252" height="170" fill="url(#mdc-dots)"/>
+  <circle cx="110" cy="330" r="150" fill="url(#mdc-blob-green)"/>
+  <circle cx="706" cy="336" r="120" fill="url(#mdc-blob-blue)"/>
+  <circle cx="648" cy="52" r="72" fill="#ffffff" opacity="0.45"/>
+
+  <!-- specimen card shadow + body -->
+  <rect x="70" y="74" width="660" height="272" rx="28" fill="#003210" opacity="0.14" filter="url(#mdc-shadow)"/>
+  <rect x="70" y="64" width="660" height="272" rx="28" fill="#ffffff" opacity="0.94"/>
+  <rect x="70" y="64" width="660" height="272" rx="28" fill="none" stroke="#bdcaba" stroke-width="2"/>
+
+  <!-- row A · buttons -->
+  <g>
+    <rect x="110" y="104" width="170" height="52" rx="26" fill="#006e2c"/>
+    <rect x="145" y="127" width="100" height="12" rx="6" fill="#ffffff" opacity="0.92"/>
+    <rect x="296" y="104" width="170" height="52" rx="26" fill="#c1eec0"/>
+    <rect x="331" y="127" width="100" height="12" rx="6" fill="#284f2e"/>
+    <rect x="482" y="104" width="170" height="52" rx="26" fill="none" stroke="#6e7a6d" stroke-width="2"/>
+    <rect x="517" y="127" width="100" height="12" rx="6" fill="#3e4a3e"/>
+  </g>
+
+  <!-- row B · selection + slider controls -->
+  <g>
+    <!-- switch (on) -->
+    <rect x="110" y="186" width="64" height="36" rx="18" fill="#006e2c"/>
+    <circle cx="156" cy="204" r="12" fill="#ffffff"/>
+    <path d="M150 204 l4.5 4.5 l8 -9" fill="none" stroke="#006e2c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- checkbox -->
+    <rect x="196" y="188" width="32" height="32" rx="9" fill="#006e2c"/>
+    <path d="M203 204 l6 6 l12 -13" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- radio -->
+    <circle cx="262" cy="204" r="15" fill="none" stroke="#006e2c" stroke-width="3"/>
+    <circle cx="262" cy="204" r="6.5" fill="#006e2c"/>
+    <!-- slider -->
+    <line x1="300" y1="204" x2="470" y2="204" stroke="#bdcaba" stroke-width="8" stroke-linecap="round"/>
+    <line x1="300" y1="204" x2="372" y2="204" stroke="#006e2c" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="300" cy="204" r="4" fill="#6e7a6d"/>
+    <circle cx="470" cy="204" r="4" fill="#6e7a6d"/>
+    <circle cx="372" cy="204" r="16" fill="#006e2c" opacity="0.16"/>
+    <circle cx="372" cy="204" r="9" fill="#006e2c"/>
+  </g>
+
+  <!-- row C · chips, icon button, progress, FAB -->
+  <g>
+    <!-- assist chip -->
+    <rect x="110" y="252" width="150" height="44" rx="22" fill="#f2f8ef" stroke="#6e7a6d" stroke-width="1.5"/>
+    <circle cx="136" cy="274" r="9" fill="#006e2c"/>
+    <rect x="152" y="268.5" width="84" height="11" rx="5.5" fill="#3e4a3e"/>
+    <!-- filter chip (selected) -->
+    <rect x="272" y="252" width="150" height="44" rx="22" fill="#c1eec0"/>
+    <path d="M292 274 l5 5 l9 -10" fill="none" stroke="#284f2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="312" y="268.5" width="86" height="11" rx="5.5" fill="#284f2e"/>
+    <!-- tertiary tonal icon button -->
+    <rect x="434" y="252" width="44" height="44" rx="22" fill="#d5e3ff"/>
+    <path d="M456 263 v22 M445 274 h22" stroke="#002a54" stroke-width="4" stroke-linecap="round"/>
+    <!-- linear progress -->
+    <rect x="492" y="269" width="108" height="10" rx="5" fill="#dfe8dc"/>
+    <rect x="492" y="269" width="64" height="10" rx="5" fill="#006e2c"/>
+    <circle cx="556" cy="274" r="4" fill="#6e7a6d"/>
+    <!-- FAB -->
+    <circle cx="648" cy="274" r="30" fill="#34a551"/>
+    <path d="M648 260 v28 M634 274 h28" stroke="#003210" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <!-- floating token accents -->
+  <g transform="rotate(12 706 52)">
+    <rect x="684" y="30" width="44" height="44" rx="12" fill="#006e2c"/>
+    <path d="M692 52 l6 6 l12 -13" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <circle cx="50" cy="306" r="18" fill="#3e92f6" opacity="0.85"/>
+  <circle cx="50" cy="306" r="7" fill="#ffffff" opacity="0.9"/>
+</svg>

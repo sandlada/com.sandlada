@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Glowing frosted editor window for the VSCode Material theme">
+  <!-- VSCode Material Theme · frosted glow style · blue -->
+  <defs>
+    <linearGradient id="vsc-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#e7f1fc"/>
+      <stop offset="1" stop-color="#c0dbf5"/>
+    </linearGradient>
+    <radialGradient id="vsc-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#66a6ee" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#66a6ee" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="vsc-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="3" fill="#2f7cd0" opacity="0.12"/>
+    </pattern>
+    <filter id="vsc-soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="45"/>
+    </filter>
+    <filter id="vsc-halo" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="16" flood-color="#2f7cd0" flood-opacity="0.8"/>
+    </filter>
+    <filter id="vsc-dream" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="400" fill="url(#vsc-bg)"/>
+  <ellipse cx="405" cy="200" rx="270" ry="150" fill="#66a6ee" opacity="0.55" filter="url(#vsc-soft)"/>
+  <circle cx="655" cy="85" r="130" fill="url(#vsc-glow)"/>
+  <rect x="560" y="0" width="240" height="150" fill="url(#vsc-dots)"/>
+
+  <g filter="url(#vsc-halo)">
+    <g filter="url(#vsc-dream)">
+      <rect x="282" y="118" width="236" height="164" rx="26" fill="none" stroke="#ffffff" stroke-width="28"/>
+      <line x1="344" y1="140" x2="344" y2="260" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
+      <g stroke="#ffffff" stroke-width="13" stroke-linecap="round">
+        <line x1="368" y1="168" x2="470" y2="168" opacity="0.95"/>
+        <line x1="368" y1="196" x2="440" y2="196" opacity="0.65"/>
+        <line x1="368" y1="224" x2="486" y2="224" opacity="0.95"/>
+        <line x1="368" y1="252" x2="420" y2="252" opacity="0.65"/>
+      </g>
+    </g>
+  </g>
+</svg>

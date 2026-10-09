@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Glowing code brackets for the Material VSCode snippet extensions">
+  <!-- Material VSCode Extensions · frosted glow style · lavender -->
+  <defs>
+    <linearGradient id="ext-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#eceefa"/>
+      <stop offset="1" stop-color="#ccd3f2"/>
+    </linearGradient>
+    <radialGradient id="ext-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#9398ea" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#9398ea" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="ext-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="3" fill="#5559c9" opacity="0.12"/>
+    </pattern>
+    <filter id="ext-soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="45"/>
+    </filter>
+    <filter id="ext-halo" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="16" flood-color="#5559c9" flood-opacity="0.8"/>
+    </filter>
+    <filter id="ext-dream" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="400" fill="url(#ext-bg)"/>
+  <ellipse cx="400" cy="200" rx="270" ry="150" fill="#9398ea" opacity="0.55" filter="url(#ext-soft)"/>
+  <circle cx="150" cy="320" r="130" fill="url(#ext-glow)"/>
+  <rect x="0" y="250" width="240" height="150" fill="url(#ext-dots)"/>
+
+  <g filter="url(#ext-halo)">
+    <g filter="url(#ext-dream)" fill="none" stroke="#ffffff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M352 142 L300 200 L352 258"/>
+      <path d="M418 128 L382 272"/>
+      <path d="M448 142 L500 200 L448 258"/>
+    </g>
+  </g>
+</svg>

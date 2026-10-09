@@ -21,7 +21,7 @@ const productList = [
     { name: "Document Context", description: "A function-first, DOM-anchored IoC container and reactive state management library for browsers.", url: Consts.Repo.DocumentContext.GitHubLink },
     { name: "MCU Helper", description: "High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.", url: Consts.Repo.MCUHelper.GitHubLink },
     { name: "Material Theme CLI", description: "Material Design CLI for generating theme tokens and serialized color outputs from a source color.", url: Consts.Repo.MaterialThemeCLI.GitHubLink },
-    { name: "Material Design 3 Theme for VSCode", description: "Material Design 3 theme for VSCode.", url: Consts.Repo.VSCodeMaterialTheme.GitHubLink },
+    { name: "VSCode Material Theme ", description: "Material Design 3 theme for VSCode.", url: Consts.Repo.VSCodeMaterialTheme.GitHubLink },
     { name: "OpenCode Material Theme", description: "Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.", url: Consts.Repo.OpenCodeMaterialTheme.GitHubLink },
     { name: "Zed Material Theme", description: "Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.", url: Consts.Repo.ZedMaterialTheme.GitHubLink },
     { name: "Material VSCode Extensions", description: "VSCode snippets: Material Web Snippets and Material Design CSS Snippets.", url: Consts.Repo.MaterialVSCodeExtensions.GitHubLink },
@@ -95,6 +95,8 @@ const uiLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MDC.FormalName,
         title: "MDC",
         description: "An open source component library that follows the Material Design 3 design specifications.",
+        coverSrc: "/covers/mdc.svg",
+        coverAlt: "MDC material component specimens on a green tonal background",
         actions: [
             { label: "GitHub", href: Consts.Repo.MDC.GitHubLink },
             { label: "NPM", href: Consts.Repo.MDC.NpmLink, variant: "text" },
@@ -105,6 +107,8 @@ const uiLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MaterialDesignCSS.FormalName,
         title: "Material Design CSS",
         description: "A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.",
+        coverSrc: "/covers/material-design-css.svg",
+        coverAlt: "Glowing style braces for the Material Design CSS token package",
         actions: [
             { label: "GitHub", href: Consts.Repo.MaterialDesignCSS.GitHubLink },
             { label: "NPM", href: Consts.Repo.MaterialDesignCSS.NpmLink, variant: "text" },
@@ -115,6 +119,8 @@ const uiLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MDK.FormalName,
         title: "MDK",
         description: "A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.",
+        coverSrc: "/covers/mdk.svg",
+        coverAlt: "Glowing shape and data nodes for the MDK data library",
         actions: [
             { label: "GitHub", href: Consts.Repo.MDK.GitHubLink },
             { label: "NPM", href: Consts.Repo.MDK.NpmLink, variant: "text" },
@@ -128,6 +134,8 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.Result.FormalName,
         title: "Result",
         description: "A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.",
+        coverSrc: "/covers/result.svg",
+        coverAlt: "Glowing check ring for the Result error-handling library",
         actions: [
             { label: "GitHub", href: Consts.Repo.Result.GitHubLink },
             { label: "NPM", href: Consts.Repo.Result.NpmLink, variant: "text" },
@@ -138,6 +146,8 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.Breakpoint.FormalName,
         title: "Breakpoint",
         description: "Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.",
+        coverSrc: "/covers/breakpoint.svg",
+        coverAlt: "Glowing ascending bars for the Breakpoint observer library",
         actions: [
             { label: "GitHub", href: Consts.Repo.Breakpoint.GitHubLink },
             { label: "NPM", href: Consts.Repo.Breakpoint.NpmLink, variant: "text" },
@@ -148,6 +158,8 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.DocumentContext.FormalName,
         title: "Document Context",
         description: "A function-first, DOM-anchored IoC container and reactive state management library for browsers.",
+        coverSrc: "/covers/document-context.svg",
+        coverAlt: "Glowing anchored document node for the Document Context library",
         actions: [
             { label: "GitHub", href: Consts.Repo.DocumentContext.GitHubLink },
             { label: "NPM", href: Consts.Repo.DocumentContext.NpmLink, variant: "text" },
@@ -158,6 +170,8 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MCUHelper.FormalName,
         title: "MCU Helper",
         description: "High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.",
+        coverSrc: "/covers/mcu-helper.svg",
+        coverAlt: "Glowing dynamic color token ring for the MCU Helper engine",
         actions: [
             { label: "GitHub", href: Consts.Repo.MCUHelper.GitHubLink },
             { label: "NPM", href: Consts.Repo.MCUHelper.NpmLink, variant: "text" },
@@ -168,6 +182,8 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MaterialThemeCLI.FormalName,
         title: "Material Theme CLI",
         description: "Material Design CLI for generating theme tokens and serialized color outputs from a source color.",
+        coverSrc: "/covers/material-theme-cli.svg",
+        coverAlt: "Glowing terminal prompt for the Material Theme CLI",
         actions: [
             { label: "GitHub", href: Consts.Repo.MaterialThemeCLI.GitHubLink },
             { label: "NPM", href: Consts.Repo.MaterialThemeCLI.NpmLink, variant: "text" },
@@ -179,8 +195,10 @@ const extensionProducts: Array<Product> = [
     {
         visual: "tertiary",
         packageName: Consts.Repo.VSCodeMaterialTheme.FormalName,
-        title: Consts.Repo.VSCodeMaterialTheme.DisplayName,
+        title: 'VSCode Material Theme',
         description: "Material Design 3 theme for VSCode.",
+        coverSrc: "/covers/vscode-material-theme.svg",
+        coverAlt: "Glowing frosted editor window for the VSCode Material theme",
         actions: [
             { label: "GitHub", href: Consts.Repo.VSCodeMaterialTheme.GitHubLink },
         ],
@@ -190,6 +208,8 @@ const extensionProducts: Array<Product> = [
         packageName: Consts.Repo.OpenCodeMaterialTheme.FormalName,
         title: "OpenCode Material Theme",
         description: "Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.",
+        coverSrc: "/covers/opencode-material-theme.svg",
+        coverAlt: "Glowing terminal cell grid for the OpenCode Material theme",
         actions: [
             { label: "GitHub", href: Consts.Repo.OpenCodeMaterialTheme.GitHubLink },
             { label: "NPM", href: Consts.Repo.OpenCodeMaterialTheme.NpmLink, variant: "text" },
@@ -200,6 +220,8 @@ const extensionProducts: Array<Product> = [
         packageName: Consts.Repo.ZedMaterialTheme.FormalName,
         title: "Zed Material Theme",
         description: "Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.",
+        coverSrc: "/covers/zed-material-theme.svg",
+        coverAlt: "Glowing double chevron for the Zed Material theme",
         actions: [
             { label: "GitHub", href: Consts.Repo.ZedMaterialTheme.GitHubLink },
             { label: "NPM", href: Consts.Repo.ZedMaterialTheme.NpmLink, variant: "text" },
@@ -210,6 +232,8 @@ const extensionProducts: Array<Product> = [
         packageName: Consts.Repo.MaterialVSCodeExtensions.FormalName,
         title: "Material VSCode Extensions",
         description: "VSCode snippets: Material Web Snippets and Material Design CSS Snippets.",
+        coverSrc: "/covers/material-vscode-extensions.svg",
+        coverAlt: "Glowing code brackets for the Material VSCode snippet extensions",
         actions: [
             { label: "GitHub", href: Consts.Repo.MaterialVSCodeExtensions.GitHubLink },
         ],
@@ -256,28 +280,6 @@ const extensionProducts: Array<Product> = [
             <a href="#extensions">Extensions</a>
             <a href="#principles">Principles</a>
         </nav>
-
-        <section class="capabilities width-container" aria-labelledby="capabilities-title">
-            <h2 class="section-title" id="capabilities-title">Capabilities</h2>
-            <p class="section-desc"><span class="wordmark">Sandlada</span> is the first MD3-native toolkit that generates UI, logic and themes from a single source color.</p>
-            <div class="capability-list">
-                <article class="capability-card">
-                    <div class="capability-visual visual-primary"></div>
-                    <h3>Real-time</h3>
-                    <p>Allows for fluid, real-time theming across light, dark and OLED, operating on MD3 dynamic schemes.</p>
-                </article>
-                <article class="capability-card">
-                    <div class="capability-visual visual-secondary"></div>
-                    <h3>Interactive and controllable</h3>
-                    <p>Generates interactive components from tokens, transforming design specs into controllable realities ready to be shipped.</p>
-                </article>
-                <article class="capability-card">
-                    <div class="capability-visual visual-tertiary"></div>
-                    <h3>Framework-agnostic quality</h3>
-                    <p>Renders rich, type-safe TypeScript at zero-framework cost. High-fidelity output for training design systems on real-world complexities.</p>
-                </article>
-            </div>
-        </section>
 
         <!-- UI Library -->
         <ProductGrid
@@ -473,72 +475,6 @@ const extensionProducts: Array<Product> = [
         color: var(--md-sys-color-on-surface);
     }
 
-    .section-desc {
-        margin: 0;
-        font-size: 14px;
-        line-height: 20px;
-        color: var(--md-sys-color-on-surface-variant);
-    }
-
-    .capabilities {
-        padding: 32px 12px 8px 12px;
-        box-sizing: border-box;
-    }
-
-    .capability-list {
-        display: grid;
-        gap: 12px;
-        margin-top: 20px;
-
-        @media (width >= 640px) {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    .capability-card {
-        border-radius: 20px;
-        border: 1px solid var(--md-sys-color-outline-variant);
-        background-color: var(--md-sys-color-surface-container-low);
-        background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
-        padding: 20px;
-        box-sizing: border-box;
-
-        & > h3 {
-            margin: 14px 0 0 0;
-            font-size: 18px;
-            line-height: 24px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-            color: var(--md-sys-color-on-surface);
-        }
-
-        & > p {
-            margin: 8px 0 0 0;
-            font-size: 14px;
-            line-height: 20px;
-            color: var(--md-sys-color-on-surface-variant);
-            text-wrap: pretty;
-        }
-    }
-
-    .capability-visual {
-        height: 140px;
-        border-radius: 12px;
-        background-color: transparent;
-
-        &.visual-primary {
-            background-image: linear-gradient(to right, var(--md-sys-color-primary-container), transparent);
-        }
-
-        &.visual-secondary {
-            background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
-        }
-
-        &.visual-tertiary {
-            background-image: linear-gradient(to right, var(--md-sys-color-tertiary-container), transparent);
-        }
-    }
-
     .principles {
         padding: 44px 12px 68px 12px;
         box-sizing: border-box;
@@ -578,13 +514,8 @@ const extensionProducts: Array<Product> = [
 
     @media (prefers-reduced-motion: reduce) {
         .btn-pill-filled,
-        .btn-pill-outlined,
-        .capability-card {
+        .btn-pill-outlined {
             transition: none;
-        }
-
-        .capability-card:hover {
-            transform: none;
         }
     }
 

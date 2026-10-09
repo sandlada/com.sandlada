@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Glowing double chevron for the Zed Material theme">
+  <!-- Zed Material Theme · frosted glow style · peach -->
+  <defs>
+    <linearGradient id="zed-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#faf0e4"/>
+      <stop offset="1" stop-color="#f1d6bd"/>
+    </linearGradient>
+    <radialGradient id="zed-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#e8a468" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#e8a468" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="zed-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="3" fill="#c07a2e" opacity="0.12"/>
+    </pattern>
+    <filter id="zed-soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="45"/>
+    </filter>
+    <filter id="zed-halo" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="16" flood-color="#c07a2e" flood-opacity="0.8"/>
+    </filter>
+    <filter id="zed-dream" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="400" fill="url(#zed-bg)"/>
+  <ellipse cx="395" cy="200" rx="270" ry="150" fill="#e8a468" opacity="0.55" filter="url(#zed-soft)"/>
+  <circle cx="650" cy="315" r="130" fill="url(#zed-glow)"/>
+  <rect x="560" y="250" width="240" height="150" fill="url(#zed-dots)"/>
+
+  <g filter="url(#zed-halo)">
+    <g filter="url(#zed-dream)" fill="none" stroke="#ffffff" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M338 128 L412 200 L338 272"/>
+      <path d="M412 128 L486 200 L412 272"/>
+    </g>
+  </g>
+</svg>
