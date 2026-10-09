@@ -1,0 +1,62 @@
+---
+import { Consts } from "@sandlada/consts.js";
+
+
+---
+<section class="hero" aria-labelledby="genie-hero-title">
+    <h1 class="title wordmark">Sandlada</h1>
+    <h2 class="subtitle">A New Frontier for<br /> OpenSource <span id="text-alter-target" class="text-alter-target">Libraries</span></h2>
+    <span class="body">Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript utilities, and VSCode, Zed and OpenCode themes.</span>
+    <div class="actions">
+        <a class="btn-pill-filled" href="#explore-latest">Explore libraries</a>
+        <a class="btn-pill-outlined" target="_blank" rel="noopener" href={Consts.Social.GitHub.Link}>View GitHub</a>
+    </div>
+</section>
+
+
+<style>
+    @reference "../styles/tailwind.css";
+
+    .hero {
+        position: relative;
+        width: 100%;
+        max-width: 840px;
+        z-index: 0;
+        height: fit-content;
+        overflow: clip;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 48px;
+        margin-bottom: 96px;
+
+        & h1.title {
+            all: unset;
+            display: inline-flex;
+            font-size: 96px;
+            font-weight: 400;
+            margin-block: 48px 0px;
+            @apply font-display;
+        }
+        & h2.subtitle {
+            @apply display-large;
+            margin-block: 24px;
+            font-weight: 900;
+        }
+        & .body {
+            @apply body-medium text-on-surface-variant;
+            max-width: 680px;
+        }
+        & .text-alter-target {
+            font-weight: 900;
+            @apply uppercase;
+        }
+
+        & .actions {
+            display: flex;
+        }
+    }
+
+</style>

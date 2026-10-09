@@ -1,6 +1,7 @@
 ---
 import BrandFooter from "@modules/brand-footer/BrandFooter.astro"
-import BrandHeader from "@modules/brand-header/BrandHeader.astro"
+import BrandHeader from "@modules/BrandHeader.astro"
+import Hero from "@modules/Hero.astro"
 import RootHTML from "@modules/html-structure/RootHTML.astro"
 import { Consts } from "@sandlada/consts.js"
 
@@ -65,152 +66,274 @@ const structuredData = [
         <BrandHeader />
     </div>
 
-    <div class="hero" id="hero">
-        <h1 class="title">Sandlada</h1>
-        <p class="subtitle">The name Sandlada is inspired by a Swedish word SANDLÅDA.</p>
-        <p class="visually-hidden">Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript utilities, and VSCode, Zed and OpenCode themes.</p>
-        <nav class="category-nav" aria-label="Product categories">
+    <main class="genie-page" id="page-content">
+        <video class="bg-video" loop muted autoplay playsinline preload="metadata">
+            <source src="/code.webm" type="video/webm" />
+        </video>
+        <style>
+            .bg-video {
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                width: 100dvw;
+                height: 100dvh;
+                object-fit: cover;
+                filter: hue-rotate(-85deg);
+            }
+            :root[dark] {
+                .bg-video {
+                    filter: invert(100%) hue-rotate(85deg);
+                }
+            }
+        </style>
+
+        <Hero></Hero>
+
+        <section class="showcase" id="explore-latest" aria-label="Featured collections">
+            <div class="showcase-viewport" id="showcase-viewport">
+                <div class="showcase-track" id="showcase-track">
+                    <article class="showcase-card visual-primary" aria-roledescription="slide" aria-label="1 of 4">
+                        <div class="showcase-overlay">
+                            <h2>Building interfaces</h2>
+                            <p>Generate vibrant UIs, from component behaviors to intricate design tokens.</p>
+                            <a class="btn-ghost" href="#ui-library">Explore UI Library</a>
+                        </div>
+                    </article>
+                    <article class="showcase-card visual-secondary" aria-roledescription="slide" aria-label="2 of 4">
+                        <div class="showcase-overlay">
+                            <h2>Simulating logic</h2>
+                            <p>Type-safe utilities, from Result handling to reactive breakpoint observers.</p>
+                            <a class="btn-ghost" href="#ts-js-library">Explore TS / JS Library</a>
+                        </div>
+                    </article>
+                    <article class="showcase-card visual-tertiary" aria-roledescription="slide" aria-label="3 of 4">
+                        <div class="showcase-overlay">
+                            <h2>Producing themes</h2>
+                            <p>Conjure light, dark and OLED worlds across VSCode, Zed and OpenCode.</p>
+                            <a class="btn-ghost" href="#extensions">Explore Extensions</a>
+                        </div>
+                    </article>
+                    <article class="showcase-card visual-dark" aria-roledescription="slide" aria-label="4 of 4">
+                        <div class="showcase-overlay">
+                            <h2>Exploring color</h2>
+                            <p>Transcend static palettes with dynamic schemes, MCU engine and theme CLI.</p>
+                            <a class="btn-ghost" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.GitHubLink}>Try MCU Helper</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="showcase-meta width-container">
+                <p>Explore the latest <span class="showcase-count" id="showcase-count" aria-live="polite">1 / 4</span></p>
+                <div class="showcase-controls">
+                    <button class="control-btn" id="showcase-prev" type="button" aria-label="Previous slide">
+                        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </button>
+                    <button class="control-btn" id="showcase-next" type="button" aria-label="Next slide">
+                        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="statement width-container" aria-label="Introduction">
+            <h2 class="statement-text"><span class="wordmark">Sandlada</span> is a general-purpose open-source team. It uses simple Material Design 3 tokens to generate photorealistic interfaces that can be explored in real time.</h2>
+        </section>
+
+        <nav class="section-tabs width-container" aria-label="Product categories">
             <a href="#ui-library">UI Library</a>
             <a href="#ts-js-library">TS / JS Library</a>
             <a href="#extensions">Extensions</a>
+            <a href="#principles">Principles</a>
         </nav>
-    </div>
 
-    <!-- UI Library -->
-    <section class="horizontal-list-wrapper" id="ui-library" aria-labelledby="ui-library-title">
-        <div class="list-meta">
-            <h2 class="list-title" id="ui-library-title">UI Library</h2>
-            <p class="list-desc">Component library, CSS library and design tokens.</p>
-        </div>
-        <div class="horizontal-list">
-            <article class="product">
-                <p class="product-package">{Consts.Repo.MDC.FormalName}</p>
-                <h3 class="product-title">MDC</h3>
-                <p class="product-desc">An open source component library that follows the Material Design 3 design specifications.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDC.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDC.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.MaterialDesignCSS.FormalName}</p>
-                <h3 class="product-title">Material Design CSS</h3>
-                <p class="product-desc">A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.MDK.FormalName}</p>
-                <h3 class="product-title">MDK</h3>
-                <p class="product-desc">A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDK.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDK.NpmLink}>NPM</a>
-                </div>
-            </article>
-        </div>
-    </section>
+        <section class="capabilities width-container" aria-labelledby="capabilities-title">
+            <h2 class="section-title" id="capabilities-title">Capabilities</h2>
+            <p class="section-desc"><span class="wordmark">Sandlada</span> is the first MD3-native toolkit that generates UI, logic and themes from a single source color.</p>
+            <div class="capability-list">
+                <article class="capability-card">
+                    <div class="capability-visual visual-primary"></div>
+                    <h3>Real-time</h3>
+                    <p>Allows for fluid, real-time theming across light, dark and OLED, operating on MD3 dynamic schemes.</p>
+                </article>
+                <article class="capability-card">
+                    <div class="capability-visual visual-secondary"></div>
+                    <h3>Interactive and controllable</h3>
+                    <p>Generates interactive components from tokens, transforming design specs into controllable realities ready to be shipped.</p>
+                </article>
+                <article class="capability-card">
+                    <div class="capability-visual visual-tertiary"></div>
+                    <h3>Framework-agnostic quality</h3>
+                    <p>Renders rich, type-safe TypeScript at zero-framework cost. High-fidelity output for training design systems on real-world complexities.</p>
+                </article>
+            </div>
+        </section>
 
-    <!-- TS/JS Library -->
-    <section class="horizontal-list-wrapper" id="ts-js-library" aria-labelledby="ts-js-library-title">
-        <div class="list-meta">
-            <h2 class="list-title" id="ts-js-library-title">TS / JS Library</h2>
-            <p class="list-desc">Framework-agnostic utilities written in TypeScript.</p>
-        </div>
-        <div class="horizontal-list">
-            <article class="product">
-                <p class="product-package">{Consts.Repo.Result.FormalName}</p>
-                <h3 class="product-title">Result</h3>
-                <p class="product-desc">A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Result.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Result.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.Breakpoint.FormalName}</p>
-                <h3 class="product-title">Breakpoint</h3>
-                <p class="product-desc">Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.DocumentContext.FormalName}</p>
-                <h3 class="product-title">Document Context</h3>
-                <p class="product-desc">A function-first, DOM-anchored IoC container and reactive state management library for browsers.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.MCUHelper.FormalName}</p>
-                <h3 class="product-title">MCU Helper</h3>
-                <p class="product-desc">High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.MaterialThemeCLI.FormalName}</p>
-                <h3 class="product-title">Material Theme CLI</h3>
-                <p class="product-desc">Material Design CLI for generating theme tokens and serialized color outputs from a source color.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.NpmLink}>NPM</a>
-                </div>
-            </article>
-        </div>
-    </section>
+        <!-- UI Library -->
+        <section class="horizontal-list-wrapper width-container" id="ui-library" aria-labelledby="ui-library-title">
+            <div class="list-meta">
+                <h2 class="list-title" id="ui-library-title">Modelling the interface</h2>
+                <p class="list-desc">Experience the component world from tokens to surface — or witness dynamic color up close.</p>
+            </div>
+            <div class="horizontal-list">
+                <article class="product">
+                    <div class="product-visual visual-primary"></div>
+                    <p class="product-package">{Consts.Repo.MDC.FormalName}</p>
+                    <h3 class="product-title">MDC</h3>
+                    <p class="product-desc">An open source component library that follows the Material Design 3 design specifications.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDC.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDC.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-secondary"></div>
+                    <p class="product-package">{Consts.Repo.MaterialDesignCSS.FormalName}</p>
+                    <h3 class="product-title">Material Design CSS</h3>
+                    <p class="product-desc">A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-tertiary"></div>
+                    <p class="product-package">{Consts.Repo.MDK.FormalName}</p>
+                    <h3 class="product-title">MDK</h3>
+                    <p class="product-desc">A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDK.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDK.NpmLink}>NPM</a>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-    <!-- Extensions -->
-    <section class="horizontal-list-wrapper" id="extensions" aria-labelledby="extensions-title">
-        <div class="list-meta">
-            <h2 class="list-title" id="extensions-title">Extensions</h2>
-            <p class="list-desc">Themes and VSCode plugins only.</p>
-        </div>
-        <div class="horizontal-list">
-            <article class="product">
-                <p class="product-package">{Consts.Repo.VSCodeMaterialTheme.FormalName}</p>
-                <h3 class="product-title">{Consts.Repo.VSCodeMaterialTheme.DisplayName}</h3>
-                <p class="product-desc">Material Design 3 theme for VSCode.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.VSCodeMaterialTheme.GitHubLink}>GitHub</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.OpenCodeMaterialTheme.FormalName}</p>
-                <h3 class="product-title">OpenCode Material Theme</h3>
-                <p class="product-desc">Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.ZedMaterialTheme.FormalName}</p>
-                <h3 class="product-title">Zed Material Theme</h3>
-                <p class="product-desc">Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.GitHubLink}>GitHub</a>
-                    <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.NpmLink}>NPM</a>
-                </div>
-            </article>
-            <article class="product">
-                <p class="product-package">{Consts.Repo.MaterialVSCodeExtensions.FormalName}</p>
-                <h3 class="product-title">Material VSCode Extensions</h3>
-                <p class="product-desc">VSCode snippets: Material Web Snippets and Material Design CSS Snippets.</p>
-                <div class="product-actions">
-                    <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialVSCodeExtensions.GitHubLink}>GitHub</a>
-                </div>
-            </article>
-        </div>
-    </section>
+        <!-- TS/JS Library -->
+        <section class="horizontal-list-wrapper width-container" id="ts-js-library" aria-labelledby="ts-js-library-title">
+            <div class="list-meta">
+                <h2 class="list-title" id="ts-js-library-title">Simulating logic</h2>
+                <p class="list-desc">Generate vibrant ecosystems, from error handling to reactive state.</p>
+            </div>
+            <div class="horizontal-list">
+                <article class="product">
+                    <div class="product-visual visual-secondary"></div>
+                    <p class="product-package">{Consts.Repo.Result.FormalName}</p>
+                    <h3 class="product-title">Result</h3>
+                    <p class="product-desc">A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Result.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Result.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-primary"></div>
+                    <p class="product-package">{Consts.Repo.Breakpoint.FormalName}</p>
+                    <h3 class="product-title">Breakpoint</h3>
+                    <p class="product-desc">Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-tertiary"></div>
+                    <p class="product-package">{Consts.Repo.DocumentContext.FormalName}</p>
+                    <h3 class="product-title">Document Context</h3>
+                    <p class="product-desc">A function-first, DOM-anchored IoC container and reactive state management library for browsers.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-dark"></div>
+                    <p class="product-package">{Consts.Repo.MCUHelper.FormalName}</p>
+                    <h3 class="product-title">MCU Helper</h3>
+                    <p class="product-desc">High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-primary"></div>
+                    <p class="product-package">{Consts.Repo.MaterialThemeCLI.FormalName}</p>
+                    <h3 class="product-title">Material Theme CLI</h3>
+                    <p class="product-desc">Material Design CLI for generating theme tokens and serialized color outputs from a source color.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.NpmLink}>NPM</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Extensions -->
+        <section class="horizontal-list-wrapper width-container" id="extensions" aria-labelledby="extensions-title">
+            <div class="list-meta">
+                <h2 class="list-title" id="extensions-title">Producing themes and fiction</h2>
+                <p class="list-desc">Conjure imaginary worlds, light and dark scenarios across editors.</p>
+            </div>
+            <div class="horizontal-list">
+                <article class="product">
+                    <div class="product-visual visual-tertiary"></div>
+                    <p class="product-package">{Consts.Repo.VSCodeMaterialTheme.FormalName}</p>
+                    <h3 class="product-title">{Consts.Repo.VSCodeMaterialTheme.DisplayName}</h3>
+                    <p class="product-desc">Material Design 3 theme for VSCode.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.VSCodeMaterialTheme.GitHubLink}>GitHub</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-dark"></div>
+                    <p class="product-package">{Consts.Repo.OpenCodeMaterialTheme.FormalName}</p>
+                    <h3 class="product-title">OpenCode Material Theme</h3>
+                    <p class="product-desc">Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-primary"></div>
+                    <p class="product-package">{Consts.Repo.ZedMaterialTheme.FormalName}</p>
+                    <h3 class="product-title">Zed Material Theme</h3>
+                    <p class="product-desc">Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.GitHubLink}>GitHub</a>
+                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.NpmLink}>NPM</a>
+                    </div>
+                </article>
+                <article class="product">
+                    <div class="product-visual visual-secondary"></div>
+                    <p class="product-package">{Consts.Repo.MaterialVSCodeExtensions.FormalName}</p>
+                    <h3 class="product-title">Material VSCode Extensions</h3>
+                    <p class="product-desc">VSCode snippets: Material Web Snippets and Material Design CSS Snippets.</p>
+                    <div class="product-actions">
+                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialVSCodeExtensions.GitHubLink}>GitHub</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="principles width-container" id="principles" aria-labelledby="principles-title">
+            <h2 class="section-title" id="principles-title">Principles</h2>
+            <div class="principles-grid">
+                <article>
+                    <h3>Material-native</h3>
+                    <p>Tokens first. Every library follows Material Design 3 specs for color, shape, motion and typography.</p>
+                </article>
+                <article>
+                    <h3>Type-safe</h3>
+                    <p>TypeScript by default, exception-free APIs and framework-agnostic cores that stay portable.</p>
+                </article>
+                <article>
+                    <h3>Responsibility</h3>
+                    <p>Open source from day one. MIT licensed, documented, and built to amplify developer creativity while limiting unintended impact.</p>
+                </article>
+            </div>
+        </section>
+    </main>
 
     <span class="divider" aria-hidden="true"></span>
 
@@ -219,6 +342,84 @@ const structuredData = [
     </div>
 
 </RootHTML>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const viewport = document.querySelector("#showcase-viewport")
+        const track = document.querySelector("#showcase-track")
+        const prev = document.querySelector("#showcase-prev")
+        const next = document.querySelector("#showcase-next")
+        const count = document.querySelector("#showcase-count")
+        if (!(viewport instanceof HTMLElement) || !(track instanceof HTMLElement)) {
+            return
+        }
+        const cards = Array.from(track.querySelectorAll(".showcase-card"))
+        if (cards.length === 0) {
+            return
+        }
+        const step = () => {
+            const card = cards[0]
+            if (!(card instanceof HTMLElement)) {
+                return viewport.clientWidth * 0.8
+            }
+            return card.clientWidth + 12
+        }
+        const currentIndex = () => {
+            const center = viewport.scrollLeft + viewport.clientWidth / 2
+            let best = 0
+            let bestDistance = Number.POSITIVE_INFINITY
+            cards.forEach((card, index) => {
+                if (!(card instanceof HTMLElement)) {
+                    return
+                }
+                const cardCenter = card.offsetLeft + card.clientWidth / 2
+                const distance = Math.abs(cardCenter - center)
+                if (distance < bestDistance) {
+                    bestDistance = distance
+                    best = index
+                }
+            })
+            return best
+        }
+        const updateCount = () => {
+            if (count) {
+                count.textContent = `${currentIndex() + 1} / ${cards.length}`
+            }
+        }
+        const goTo = (index: number) => {
+            const target = cards[(index + cards.length) % cards.length]
+            if (target instanceof HTMLElement) {
+                viewport.scrollTo({ left: target.offsetLeft - (viewport.clientWidth - target.clientWidth) / 2, behavior: "smooth" })
+            }
+        }
+        if (!(prev instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) {
+            return
+        }
+        if (prev.dataset.bound === "true") {
+            return
+        }
+        prev.dataset.bound = "true"
+        next.dataset.bound = "true"
+        prev.addEventListener("click", () => {
+            goTo(currentIndex() - 1)
+        })
+        next.addEventListener("click", () => {
+            goTo(currentIndex() + 1)
+        })
+        viewport.addEventListener("scroll", updateCount, { passive: true })
+        viewport.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") {
+                event.preventDefault()
+                goTo(currentIndex() - 1)
+            }
+            if (event.key === "ArrowRight") {
+                event.preventDefault()
+                goTo(currentIndex() + 1)
+            }
+        })
+        updateCount()
+    })
+</script>
 
 <style>
 
@@ -246,65 +447,478 @@ const structuredData = [
         border: 0;
     }
 
-    .hero {
-        position: relative;
-        text-align: center;
+    .genie-page {
         display: block;
-        margin-left: auto;
-        margin-right: auto;
-        padding-top: 56px;
-        margin-bottom: 96px;
+        overflow: clip;
+    }
 
-        @media (width >= 640px) {
-            padding-top: 64px;
-            margin-bottom: 128px;
+    .btn-pill-filled,
+    .btn-pill-outlined {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 24px;
+        border-radius: 999px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+        text-decoration: none;
+        transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+
+        &:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: 2px;
         }
 
-        & > .title {
-            font-size: 56px;
-            @media (width >= 560px) {
-                font-size: 72px;
-            }
-            @media (width >= 640px) {
-                font-size: 96px;
-            }
-            font-weight: 900;
-            color: var(--md-sys-color-primary);
-        }
-        & > .subtitle {
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--md-sys-color-primary);
+        &:active {
+            transform: scale(0.98);
         }
     }
 
-    .category-nav {
+    .btn-pill-filled {
+        color: var(--md-sys-color-on-primary);
+        background-color: var(--md-sys-color-primary);
+        box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--md-sys-color-primary) 64%, transparent);
+
+        &:hover {
+            filter: brightness(0.94);
+        }
+    }
+
+    .btn-pill-outlined {
+        color: var(--md-sys-color-on-surface);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        background-color: var(--md-sys-color-surface);
+
+        &:hover {
+            background-color: var(--md-sys-color-surface-container-high);
+            border-color: var(--md-sys-color-outline);
+        }
+    }
+
+    .showcase {
+        display: block;
+        margin-bottom: 16px;
+        scroll-margin-top: 16px;
+    }
+
+    .showcase-viewport {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: max(12px, calc((100vw - 1080px) / 2 + 12px));
+        scrollbar-width: none;
+        cursor: grab;
+        padding-left: max(12px, calc((100vw - 1080px) / 2 + 12px));
+        padding-right: max(12px, calc((100vw - 1080px) / 2 + 12px));
+
+        &:active {
+            cursor: grabbing;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: -2px;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .showcase-track {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: min(82vw, 760px);
+        grid-template-rows: 1fr;
+        gap: 12px;
+
+        @media (width >= 840px) {
+            grid-auto-columns: min(68vw, 860px);
+        }
+    }
+
+    .showcase-card {
+        position: relative;
+        scroll-snap-align: center;
+        overflow: hidden;
+        border-radius: 28px;
+        min-height: 440px;
+        aspect-ratio: 16 / 10;
+        max-height: 620px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        padding: 32px 32px 28px 32px;
+        isolation: isolate;
+        background-color: var(--md-sys-color-surface-container-high);
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 28px -12px rgb(0 0 0 / 0.22);
+        transition: transform 240ms ease, box-shadow 240ms ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.08), 0 16px 40px -16px rgb(0 0 0 / 0.28);
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+            transition: transform 480ms ease;
+        }
+
+        &:hover::before {
+            transform: scale(1.015);
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(to bottom, rgb(0 0 0 / 0.32) 0%, rgb(0 0 0 / 0.08) 30%, transparent 48%);
+        }
+
+        &.visual-primary::before {
+            background:
+                radial-gradient(42% 36% at 24% 18%, rgb(255 255 255 / 0.9) 0%, transparent 70%),
+                radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--md-sys-color-primary) 72%, white) 0%, transparent 55%),
+                linear-gradient(160deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-secondary-container) 52%, var(--md-sys-color-tertiary-container) 100%);
+        }
+
+        &.visual-secondary::before {
+            background:
+                radial-gradient(38% 32% at 78% 22%, rgb(255 255 255 / 0.85) 0%, transparent 68%),
+                radial-gradient(100% 80% at 80% 20%, color-mix(in srgb, var(--md-sys-color-tertiary) 55%, white) 0%, transparent 50%),
+                linear-gradient(165deg, var(--md-sys-color-secondary-container) 0%, var(--md-sys-color-surface-container-highest) 55%, var(--md-sys-color-primary-container) 100%);
+        }
+
+        &.visual-tertiary::before {
+            background:
+                radial-gradient(46% 38% at 30% 16%, rgb(255 255 255 / 0.5) 0%, transparent 70%),
+                radial-gradient(110% 85% at 30% 15%, color-mix(in srgb, var(--md-sys-color-tertiary-container) 90%, white) 0%, transparent 60%),
+                linear-gradient(155deg, var(--md-sys-color-tertiary-container) 0%, var(--md-sys-color-primary) 58%, #0b0b18 100%);
+        }
+
+        &.visual-dark::before {
+            background:
+                radial-gradient(28% 22% at 72% 18%, rgb(255 255 255 / 0.72) 0%, rgb(255 255 255 / 0.12) 32%, transparent 68%),
+                radial-gradient(90% 70% at 70% 20%, #4a4a6a 0%, transparent 55%),
+                radial-gradient(70% 55% at 50% 88%, #8a6a5a 0%, transparent 60%),
+                linear-gradient(180deg, #0b0e2a 0%, #2a2438 52%, #5a4a52 100%);
+        }
+    }
+
+    .showcase-overlay {
+        max-width: 44ch;
+        text-wrap: balance;
+
+        & > h2 {
+            margin: 0;
+            font-size: 22px;
+            line-height: 28px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgb(0 0 0 / 0.32), 0 4px 16px rgb(0 0 0 / 0.28);
+        }
+
+        & > p {
+            margin: 8px 0 0 0;
+            max-width: 36ch;
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 400;
+            color: rgb(255 255 255 / 0.94);
+            text-shadow: 0 1px 2px rgb(0 0 0 / 0.32), 0 4px 16px rgb(0 0 0 / 0.24);
+            text-wrap: pretty;
+        }
+
+        .visual-primary &,
+        .visual-secondary & {
+            & > h2 {
+                color: var(--md-sys-color-on-primary-container);
+                text-shadow: none;
+            }
+
+            & > p {
+                color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 88%, transparent);
+                text-shadow: none;
+            }
+        }
+
+        .visual-primary &::after,
+        .visual-secondary &::after {
+            content: none;
+        }
+    }
+
+    .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 18px;
+        min-height: 38px;
+        padding: 0 18px;
+        border-radius: 999px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+        text-decoration: none;
+        text-shadow: none;
+        color: #ffffff;
+        background: rgb(18 18 18 / 0.44);
+        border: 1px solid rgb(255 255 255 / 0.38);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+
+        &:hover {
+            background: rgb(18 18 18 / 0.6);
+            border-color: rgb(255 255 255 / 0.6);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+
+        &:focus-visible {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+
+        .visual-primary &,
+        .visual-secondary & {
+            color: var(--md-sys-color-on-secondary-container);
+            background: color-mix(in srgb, var(--md-sys-color-surface) 78%, transparent);
+            border-color: var(--md-sys-color-outline-variant);
+        }
+
+        .visual-primary &:hover,
+        .visual-secondary &:hover {
+            background: var(--md-sys-color-surface);
+        }
+
+        .visual-primary &:focus-visible,
+        .visual-secondary &:focus-visible {
+            outline-color: var(--md-sys-color-primary);
+        }
+    }
+
+    .showcase-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 12px 0 12px;
+        box-sizing: border-box;
+
+        & > p {
+            margin: 0;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+    }
+
+    .showcase-count {
+        font-size: 12px;
+        line-height: 16px;
+        font-variant-numeric: tabular-nums;
+        color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 72%, transparent);
+    }
+
+    .showcase-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        padding: 4px;
+        border-radius: 999px;
+        background-color: var(--md-sys-color-surface-container-high);
+        border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 64%, transparent);
+    }
+
+    .control-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        border: 0;
+        cursor: pointer;
+        color: var(--md-sys-color-on-surface-variant);
+        background: transparent;
+        transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+
+        &:hover {
+            background-color: var(--md-sys-color-surface-container-highest);
+            color: var(--md-sys-color-on-surface);
+        }
+
+        &:active {
+            transform: scale(0.94);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: 2px;
+        }
+
+        &:disabled {
+            opacity: 0.38;
+            cursor: default;
+        }
+
+        & > svg {
+            display: block;
+        }
+    }
+
+    .statement {
+        text-align: center;
+        padding: 60px 24px 26px 24px;
+        box-sizing: border-box;
+
+        @media (width >= 640px) {
+            padding-top: 76px;
+        }
+    }
+
+    .statement-text {
+        margin: 0 auto;
+        max-width: 720px;
+        font-size: 28px;
+        line-height: 1.28;
+        font-weight: 500;
+        letter-spacing: -0.5px;
+        color: var(--md-sys-color-on-surface);
+        text-wrap: balance;
+
+        @media (width >= 640px) {
+            font-size: 38px;
+            line-height: 1.2;
+        }
+    }
+
+    .section-tabs {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
         gap: 8px;
-        margin-top: 24px;
+        padding: 18px 12px 8px 12px;
+        box-sizing: border-box;
 
         & > a {
             font-size: 14px;
+            line-height: 20px;
             font-weight: 500;
             color: var(--md-sys-color-on-surface-variant);
             text-decoration: none;
             border: 1px solid var(--md-sys-color-outline-variant);
             border-radius: 999px;
-            padding: 8px 16px;
+            padding: 9px 18px;
+            transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
 
             &:hover {
                 color: var(--md-sys-color-on-secondary-container);
                 background-color: var(--md-sys-color-secondary-container);
+                border-color: transparent;
             }
+
+            &:focus-visible {
+                outline: 2px solid var(--md-sys-color-primary);
+                outline-offset: 2px;
+            }
+        }
+    }
+
+    .section-title {
+        margin: 0 0 8px 0;
+        font-size: 28px;
+        line-height: 36px;
+        font-weight: 700;
+        color: var(--md-sys-color-on-surface);
+    }
+
+    .section-desc {
+        margin: 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .capabilities {
+        padding: 32px 12px 8px 12px;
+        box-sizing: border-box;
+    }
+
+    .capability-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 20px;
+
+        @media (width >= 640px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .capability-card {
+        border-radius: 20px;
+        border: 1px solid var(--md-sys-color-outline-variant);
+        background-color: var(--md-sys-color-surface-container-low);
+        background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
+        padding: 20px;
+        box-sizing: border-box;
+
+        & > h3 {
+            margin: 14px 0 0 0;
+            font-size: 18px;
+            line-height: 24px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        & > p {
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--md-sys-color-on-surface-variant);
+            text-wrap: pretty;
+        }
+    }
+
+    .capability-visual {
+        height: 140px;
+        border-radius: 12px;
+        background-color: transparent;
+
+        &.visual-primary {
+            background-image: linear-gradient(to right, var(--md-sys-color-primary-container), transparent);
+        }
+
+        &.visual-secondary {
+            background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
+        }
+
+        &.visual-tertiary {
+            background-image: linear-gradient(to right, var(--md-sys-color-tertiary-container), transparent);
         }
     }
 
     .horizontal-list-wrapper {
         position: relative;
         display: block;
-        margin-bottom: 56px;
+        margin-top: 40px;
+        margin-bottom: 8px;
         padding: 12px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -396,7 +1010,36 @@ const structuredData = [
         border-radius: 20px;
         border: 1px solid var(--md-sys-color-outline-variant);
         background-color: var(--md-sys-color-surface-container-low);
-        padding: 24px;
+        background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
+        padding: 20px;
+        overflow: hidden;
+
+        &:focus-within {
+            border-color: var(--md-sys-color-primary);
+        }
+
+        .product-visual {
+            height: 140px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            background-color: transparent;
+
+            &.visual-primary {
+                background-image: linear-gradient(to right, var(--md-sys-color-primary-container), transparent);
+            }
+
+            &.visual-secondary {
+                background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
+            }
+
+            &.visual-tertiary {
+                background-image: linear-gradient(to right, var(--md-sys-color-tertiary-container), transparent);
+            }
+
+            &.visual-dark {
+                background-image: linear-gradient(to right, var(--md-sys-color-error-container), transparent);
+            }
+        }
 
         .product-package {
             margin: 0;
@@ -447,6 +1090,12 @@ const structuredData = [
         line-height: 20px;
         font-weight: 500;
         text-decoration: none;
+        transition: background 160ms ease, filter 160ms ease;
+
+        &:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: 2px;
+        }
     }
 
     .btn-tonal {
@@ -463,6 +1112,79 @@ const structuredData = [
 
         &:hover {
             background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+        }
+    }
+
+    .principles {
+        padding: 44px 12px 68px 12px;
+        box-sizing: border-box;
+    }
+
+    .principles-grid {
+        display: grid;
+        gap: 20px 12px;
+        margin-top: 22px;
+
+        @media (width >= 640px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        & > article {
+            border-top: 1px solid var(--md-sys-color-outline-variant);
+            padding-top: 16px;
+
+            & > h3 {
+                margin: 0;
+                font-size: 16px;
+                line-height: 22px;
+                font-weight: 700;
+                letter-spacing: 0.1px;
+                color: var(--md-sys-color-on-surface);
+            }
+
+            & > p {
+                margin: 8px 0 0 0;
+                font-size: 14px;
+                line-height: 20px;
+                color: var(--md-sys-color-on-surface-variant);
+                text-wrap: pretty;
+            }
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .showcase-viewport {
+            scroll-behavior: auto;
+        }
+
+        .showcase-card,
+        .showcase-card::before,
+        .btn-ghost,
+        .btn-pill-filled,
+        .btn-pill-outlined,
+        .control-btn,
+        .product,
+        .capability-card {
+            transition: none;
+        }
+
+        .showcase-card:hover,
+        .showcase-card:hover::before,
+        .product:hover,
+        .capability-card:hover {
+            transform: none;
+        }
+    }
+
+    @media (width < 480px) {
+        .showcase-card {
+            min-height: 400px;
+            padding: 24px 22px;
+        }
+
+        .showcase-overlay > p {
+            font-size: 15px;
+            line-height: 22px;
         }
     }
 
