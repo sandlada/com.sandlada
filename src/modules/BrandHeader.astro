@@ -70,10 +70,23 @@ import DarkModeSvg from "@material-design-icons/svg/round/dark_mode.svg?raw"
     .brand-header {
         display: flex;
         align-items: center;
-        padding-inline-start: 12px;
-        padding-inline-end: 12px;
         gap: 12px;
-        height: 56px;
+        height: 64px;
+
+        padding-inline: 48px;
+
+        @media (width >= 600px) {
+            padding-inline: 96px;
+        }
+        @media (width >= 840px) {
+            padding-inline: 192px;
+        }
+        @media (width >= 1200px) {
+            padding-inline: 284px;
+        }
+        @media (width >= 1600px) {
+            padding-inline: 368px;
+        }
 
         & > .navigation-links {
             @apply label-medium;

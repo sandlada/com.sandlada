@@ -1,0 +1,239 @@
+---
+export type ProductVisual = "primary" | "secondary" | "tertiary" | "dark";
+
+export interface ProductAction {
+    label: string;
+    href: string;
+    /** Tonal (filled) is the primary action, text is the secondary action. */
+    variant?: "tonal" | "text";
+}
+
+export interface Product {
+    visual: ProductVisual;
+    packageName: string;
+    title: string;
+    description: string;
+    actions: Array<ProductAction>;
+}
+
+interface Props {
+    id: string;
+    title: string;
+    description: string;
+    products: Array<Product>;
+}
+
+const { id, title, description, products } = Astro.props;
+const headingId = `${id}-title`;
+---
+
+<section class="tile-grid" id={id} aria-labelledby={headingId}>
+    <div class="list-meta">
+        <h2 class="list-title" id={headingId}>{title}</h2>
+        <p class="list-desc">{description}</p>
+    </div>
+    <div class="card-grid">
+        {
+            products.map((product) => (
+                <article class="product">
+                    <div
+                        class:list={["product-visual", `visual-${product.visual}`]}
+                    />
+                    <p class="product-package">{product.packageName}</p>
+                    <h3 class="product-title">{product.title}</h3>
+                    <p class="product-desc">{product.description}</p>
+                    <div class="product-actions">
+                        {product.actions.map((action) => (
+                            <a
+                                class:list={[
+                                    action.variant === "text"
+                                        ? "btn-text"
+                                        : "btn-tonal",
+                                ]}
+                                target="_blank"
+                                rel="noopener"
+                                href={action.href}
+                            >
+                                {action.label}
+                            </a>
+                        ))}
+                    </div>
+                </article>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .tile-grid {
+        display: block;
+        max-width: 840px;
+        margin: 40px auto 8px auto;
+        padding: 12px;
+        box-sizing: border-box;
+        scroll-margin-top: 16px;
+    }
+
+    .list-meta {
+        margin-bottom: 16px;
+        box-sizing: border-box;
+    }
+
+    .list-title {
+        margin: 0 0 8px 0;
+        font-size: 28px;
+        line-height: 36px;
+        font-weight: 700;
+        color: var(--md-sys-color-on-surface);
+    }
+
+    .list-desc {
+        margin: 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .card-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+
+        @media (width >= 600px) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media (width >= 840px) {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    .product {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 20px;
+        border: 1px solid var(--md-sys-color-outline-variant);
+        background-color: var(--md-sys-color-surface-container-low);
+        background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
+        padding: 20px;
+        overflow: hidden;
+        transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -16px color-mix(in srgb, var(--md-sys-color-primary) 48%, transparent);
+        }
+
+        &:focus-within {
+            border-color: var(--md-sys-color-primary);
+        }
+
+        .product-visual {
+            height: 140px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            background-color: transparent;
+
+            &.visual-primary {
+                background-image: linear-gradient(to right, var(--md-sys-color-primary-container), transparent);
+            }
+
+            &.visual-secondary {
+                background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
+            }
+
+            &.visual-tertiary {
+                background-image: linear-gradient(to right, var(--md-sys-color-tertiary-container), transparent);
+            }
+
+            &.visual-dark {
+                background-image: linear-gradient(to right, var(--md-sys-color-error-container), transparent);
+            }
+        }
+
+        .product-package {
+            margin: 0;
+            font-size: 12px;
+            line-height: 16px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+            color: var(--md-sys-color-on-surface-variant);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product-title {
+            margin: 8px 0 0 0;
+            font-size: 22px;
+            line-height: 28px;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .product-desc {
+            margin: 12px 0 0 0;
+            flex-grow: 1;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--md-sys-color-on-surface-variant);
+            text-wrap: pretty;
+        }
+
+        .product-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+    }
+
+    .btn-tonal,
+    .btn-text {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background 160ms ease, filter 160ms ease;
+
+        &:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: 2px;
+        }
+    }
+
+    .btn-tonal {
+        color: var(--md-sys-color-on-secondary-container);
+        background-color: var(--md-sys-color-secondary-container);
+
+        &:hover {
+            filter: brightness(0.96);
+        }
+    }
+
+    .btn-text {
+        color: var(--md-sys-color-primary);
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .product {
+            transition: none;
+        }
+
+        .product:hover {
+            transform: none;
+        }
+    }
+</style>

@@ -1,8 +1,9 @@
 ---
-import BrandFooter from "@modules/brand-footer/BrandFooter.astro"
+import BrandFooter from "@modules/BrandFooter.astro"
 import BrandHeader from "@modules/BrandHeader.astro"
 import Hero from "@modules/Hero.astro"
 import RootHTML from "@modules/html-structure/RootHTML.astro"
+import ProductGrid, { type Product } from "@modules/ProductGrid.astro"
 import ScrollingBanner, { type Banner } from "@modules/ScrollingBanner.astro"
 import { Consts } from "@sandlada/consts.js"
 
@@ -87,6 +88,133 @@ const Banners = [
         linkElementTextContent: 'Explore'
     },
 ] as Array<Banner>
+
+const uiLibraryProducts: Array<Product> = [
+    {
+        visual: "primary",
+        packageName: Consts.Repo.MDC.FormalName,
+        title: "MDC",
+        description: "An open source component library that follows the Material Design 3 design specifications.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.MDC.GitHubLink },
+            { label: "NPM", href: Consts.Repo.MDC.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "secondary",
+        packageName: Consts.Repo.MaterialDesignCSS.FormalName,
+        title: "Material Design CSS",
+        description: "A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.MaterialDesignCSS.GitHubLink },
+            { label: "NPM", href: Consts.Repo.MaterialDesignCSS.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "tertiary",
+        packageName: Consts.Repo.MDK.FormalName,
+        title: "MDK",
+        description: "A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.MDK.GitHubLink },
+            { label: "NPM", href: Consts.Repo.MDK.NpmLink, variant: "text" },
+        ],
+    },
+]
+
+const tsJsLibraryProducts: Array<Product> = [
+    {
+        visual: "secondary",
+        packageName: Consts.Repo.Result.FormalName,
+        title: "Result",
+        description: "A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.Result.GitHubLink },
+            { label: "NPM", href: Consts.Repo.Result.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "primary",
+        packageName: Consts.Repo.Breakpoint.FormalName,
+        title: "Breakpoint",
+        description: "Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.Breakpoint.GitHubLink },
+            { label: "NPM", href: Consts.Repo.Breakpoint.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "tertiary",
+        packageName: Consts.Repo.DocumentContext.FormalName,
+        title: "Document Context",
+        description: "A function-first, DOM-anchored IoC container and reactive state management library for browsers.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.DocumentContext.GitHubLink },
+            { label: "NPM", href: Consts.Repo.DocumentContext.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "dark",
+        packageName: Consts.Repo.MCUHelper.FormalName,
+        title: "MCU Helper",
+        description: "High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.MCUHelper.GitHubLink },
+            { label: "NPM", href: Consts.Repo.MCUHelper.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "primary",
+        packageName: Consts.Repo.MaterialThemeCLI.FormalName,
+        title: "Material Theme CLI",
+        description: "Material Design CLI for generating theme tokens and serialized color outputs from a source color.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.MaterialThemeCLI.GitHubLink },
+            { label: "NPM", href: Consts.Repo.MaterialThemeCLI.NpmLink, variant: "text" },
+        ],
+    },
+]
+
+const extensionProducts: Array<Product> = [
+    {
+        visual: "tertiary",
+        packageName: Consts.Repo.VSCodeMaterialTheme.FormalName,
+        title: Consts.Repo.VSCodeMaterialTheme.DisplayName,
+        description: "Material Design 3 theme for VSCode.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.VSCodeMaterialTheme.GitHubLink },
+        ],
+    },
+    {
+        visual: "dark",
+        packageName: Consts.Repo.OpenCodeMaterialTheme.FormalName,
+        title: "OpenCode Material Theme",
+        description: "Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.OpenCodeMaterialTheme.GitHubLink },
+            { label: "NPM", href: Consts.Repo.OpenCodeMaterialTheme.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "primary",
+        packageName: Consts.Repo.ZedMaterialTheme.FormalName,
+        title: "Zed Material Theme",
+        description: "Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.ZedMaterialTheme.GitHubLink },
+            { label: "NPM", href: Consts.Repo.ZedMaterialTheme.NpmLink, variant: "text" },
+        ],
+    },
+    {
+        visual: "secondary",
+        packageName: Consts.Repo.MaterialVSCodeExtensions.FormalName,
+        title: "Material VSCode Extensions",
+        description: "VSCode snippets: Material Web Snippets and Material Design CSS Snippets.",
+        actions: [
+            { label: "GitHub", href: Consts.Repo.MaterialVSCodeExtensions.GitHubLink },
+        ],
+    },
+]
 ---
 
 <RootHTML title={pageTitle} description={pageDescription} structuredData={structuredData}>
@@ -152,152 +280,28 @@ const Banners = [
         </section>
 
         <!-- UI Library -->
-        <section class="horizontal-list-wrapper width-container" id="ui-library" aria-labelledby="ui-library-title">
-            <div class="list-meta">
-                <h2 class="list-title" id="ui-library-title">Modelling the interface</h2>
-                <p class="list-desc">Experience the component world from tokens to surface — or witness dynamic color up close.</p>
-            </div>
-            <div class="horizontal-list">
-                <article class="product">
-                    <div class="product-visual visual-primary"></div>
-                    <p class="product-package">{Consts.Repo.MDC.FormalName}</p>
-                    <h3 class="product-title">MDC</h3>
-                    <p class="product-desc">An open source component library that follows the Material Design 3 design specifications.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDC.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDC.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-secondary"></div>
-                    <p class="product-package">{Consts.Repo.MaterialDesignCSS.FormalName}</p>
-                    <h3 class="product-title">Material Design CSS</h3>
-                    <p class="product-desc">A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialDesignCSS.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-tertiary"></div>
-                    <p class="product-package">{Consts.Repo.MDK.FormalName}</p>
-                    <h3 class="product-title">MDK</h3>
-                    <p class="product-desc">A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MDK.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MDK.NpmLink}>NPM</a>
-                    </div>
-                </article>
-            </div>
-        </section>
+        <ProductGrid
+            id="ui-library"
+            title="Modelling the interface"
+            description="Experience the component world from tokens to surface — or witness dynamic color up close."
+            products={uiLibraryProducts}
+        />
 
         <!-- TS/JS Library -->
-        <section class="horizontal-list-wrapper width-container" id="ts-js-library" aria-labelledby="ts-js-library-title">
-            <div class="list-meta">
-                <h2 class="list-title" id="ts-js-library-title">Simulating logic</h2>
-                <p class="list-desc">Generate vibrant ecosystems, from error handling to reactive state.</p>
-            </div>
-            <div class="horizontal-list">
-                <article class="product">
-                    <div class="product-visual visual-secondary"></div>
-                    <p class="product-package">{Consts.Repo.Result.FormalName}</p>
-                    <h3 class="product-title">Result</h3>
-                    <p class="product-desc">A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Result.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Result.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-primary"></div>
-                    <p class="product-package">{Consts.Repo.Breakpoint.FormalName}</p>
-                    <h3 class="product-title">Breakpoint</h3>
-                    <p class="product-desc">Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.Breakpoint.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-tertiary"></div>
-                    <p class="product-package">{Consts.Repo.DocumentContext.FormalName}</p>
-                    <h3 class="product-title">Document Context</h3>
-                    <p class="product-desc">A function-first, DOM-anchored IoC container and reactive state management library for browsers.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.DocumentContext.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-dark"></div>
-                    <p class="product-package">{Consts.Repo.MCUHelper.FormalName}</p>
-                    <h3 class="product-title">MCU Helper</h3>
-                    <p class="product-desc">High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-primary"></div>
-                    <p class="product-package">{Consts.Repo.MaterialThemeCLI.FormalName}</p>
-                    <h3 class="product-title">Material Theme CLI</h3>
-                    <p class="product-desc">Material Design CLI for generating theme tokens and serialized color outputs from a source color.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.MaterialThemeCLI.NpmLink}>NPM</a>
-                    </div>
-                </article>
-            </div>
-        </section>
+        <ProductGrid
+            id="ts-js-library"
+            title="Simulating logic"
+            description="Generate vibrant ecosystems, from error handling to reactive state."
+            products={tsJsLibraryProducts}
+        />
 
         <!-- Extensions -->
-        <section class="horizontal-list-wrapper width-container" id="extensions" aria-labelledby="extensions-title">
-            <div class="list-meta">
-                <h2 class="list-title" id="extensions-title">Producing themes and fiction</h2>
-                <p class="list-desc">Conjure imaginary worlds, light and dark scenarios across editors.</p>
-            </div>
-            <div class="horizontal-list">
-                <article class="product">
-                    <div class="product-visual visual-tertiary"></div>
-                    <p class="product-package">{Consts.Repo.VSCodeMaterialTheme.FormalName}</p>
-                    <h3 class="product-title">{Consts.Repo.VSCodeMaterialTheme.DisplayName}</h3>
-                    <p class="product-desc">Material Design 3 theme for VSCode.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.VSCodeMaterialTheme.GitHubLink}>GitHub</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-dark"></div>
-                    <p class="product-package">{Consts.Repo.OpenCodeMaterialTheme.FormalName}</p>
-                    <h3 class="product-title">OpenCode Material Theme</h3>
-                    <p class="product-desc">Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.OpenCodeMaterialTheme.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-primary"></div>
-                    <p class="product-package">{Consts.Repo.ZedMaterialTheme.FormalName}</p>
-                    <h3 class="product-title">Zed Material Theme</h3>
-                    <p class="product-desc">Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.GitHubLink}>GitHub</a>
-                        <a class="btn-text" target="_blank" rel="noopener" href={Consts.Repo.ZedMaterialTheme.NpmLink}>NPM</a>
-                    </div>
-                </article>
-                <article class="product">
-                    <div class="product-visual visual-secondary"></div>
-                    <p class="product-package">{Consts.Repo.MaterialVSCodeExtensions.FormalName}</p>
-                    <h3 class="product-title">Material VSCode Extensions</h3>
-                    <p class="product-desc">VSCode snippets: Material Web Snippets and Material Design CSS Snippets.</p>
-                    <div class="product-actions">
-                        <a class="btn-tonal" target="_blank" rel="noopener" href={Consts.Repo.MaterialVSCodeExtensions.GitHubLink}>GitHub</a>
-                    </div>
-                </article>
-            </div>
-        </section>
+        <ProductGrid
+            id="extensions"
+            title="Producing themes and fiction"
+            description="Conjure imaginary worlds, light and dark scenarios across editors."
+            products={extensionProducts}
+        />
 
         <section class="principles width-container" id="principles" aria-labelledby="principles-title">
             <h2 class="section-title" id="principles-title">Principles</h2>
@@ -535,207 +539,6 @@ const Banners = [
         }
     }
 
-    .horizontal-list-wrapper {
-        position: relative;
-        display: block;
-        margin-top: 40px;
-        margin-bottom: 8px;
-        padding: 12px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: auto 1fr;
-        scroll-margin-top: 16px;
-        &::after {
-            content: '';
-            display: flex;
-            position: absolute;
-            width: 56px;
-            bottom: 0;
-            right: 0;
-            height: 324px;
-            z-index: 1;
-            pointer-events: none;
-            background: linear-gradient(to left, var(--md-sys-color-surface), transparent);
-        }
-    }
-
-    .list-meta {
-        grid-column: 1/-1;
-        grid-row: 1/2;
-        @media (width >= 840px) {
-            grid-column: 2/-1;
-        }
-
-        margin-bottom: 16px;
-        box-sizing: border-box;
-    }
-
-    .list-title {
-        margin: 0 0 8px 0;
-        font-size: 28px;
-        line-height: 36px;
-        font-weight: 700;
-        color: var(--md-sys-color-on-surface);
-    }
-
-    .list-desc {
-        margin: 0;
-        font-size: 14px;
-        line-height: 20px;
-        color: var(--md-sys-color-on-surface-variant);
-    }
-
-    .horizontal-list {
-        grid-row: 2/3;
-        grid-column: 1/-1;
-        @media (width >= 840px) {
-            grid-column: 2/-1;
-        }
-
-        position: relative;
-        z-index: 0;
-        overflow-x: auto;
-        overflow-y: hidden;
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: 360px;
-        grid-template-rows: 1fr;
-        gap: 12px;
-        min-height: 300px;
-        width: 100%;
-        padding-right: 56px;
-
-        scrollbar-width: thin;
-        scrollbar-color: var(--md-sys-color-primary) transparent;
-
-        &::-webkit-scrollbar {
-            height: 8px;
-        }
-        &::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        &::-webkit-scrollbar-thumb {
-            background-color: var(--md-sys-color-primary);
-            border-radius: 8px;
-        }
-        &::-webkit-scrollbar-thumb:hover {
-            background-color: var(--md-sys-color-secondary);
-        }
-    }
-
-    .product {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        box-sizing: border-box;
-        border-radius: 20px;
-        border: 1px solid var(--md-sys-color-outline-variant);
-        background-color: var(--md-sys-color-surface-container-low);
-        background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
-        padding: 20px;
-        overflow: hidden;
-
-        &:focus-within {
-            border-color: var(--md-sys-color-primary);
-        }
-
-        .product-visual {
-            height: 140px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            background-color: transparent;
-
-            &.visual-primary {
-                background-image: linear-gradient(to right, var(--md-sys-color-primary-container), transparent);
-            }
-
-            &.visual-secondary {
-                background-image: linear-gradient(to right, var(--md-sys-color-secondary-container), transparent);
-            }
-
-            &.visual-tertiary {
-                background-image: linear-gradient(to right, var(--md-sys-color-tertiary-container), transparent);
-            }
-
-            &.visual-dark {
-                background-image: linear-gradient(to right, var(--md-sys-color-error-container), transparent);
-            }
-        }
-
-        .product-package {
-            margin: 0;
-            font-size: 12px;
-            line-height: 16px;
-            font-weight: 500;
-            letter-spacing: 0.4px;
-            color: var(--md-sys-color-on-surface-variant);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .product-title {
-            margin: 8px 0 0 0;
-            font-size: 22px;
-            line-height: 28px;
-            font-weight: 700;
-            color: var(--md-sys-color-on-surface);
-        }
-
-        .product-desc {
-            margin: 12px 0 0 0;
-            flex-grow: 1;
-            font-size: 14px;
-            line-height: 20px;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-
-        .product-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 20px;
-            opacity: 1;
-        }
-    }
-
-    .btn-tonal,
-    .btn-text {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 40px;
-        padding: 0 16px;
-        border-radius: 20px;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 500;
-        text-decoration: none;
-        transition: background 160ms ease, filter 160ms ease;
-
-        &:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary);
-            outline-offset: 2px;
-        }
-    }
-
-    .btn-tonal {
-        color: var(--md-sys-color-on-secondary-container);
-        background-color: var(--md-sys-color-secondary-container);
-
-        &:hover {
-            filter: brightness(0.96);
-        }
-    }
-
-    .btn-text {
-        color: var(--md-sys-color-primary);
-
-        &:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
-        }
-    }
-
     .principles {
         padding: 44px 12px 68px 12px;
         box-sizing: border-box;
@@ -776,12 +579,10 @@ const Banners = [
     @media (prefers-reduced-motion: reduce) {
         .btn-pill-filled,
         .btn-pill-outlined,
-        .product,
         .capability-card {
             transition: none;
         }
 
-        .product:hover,
         .capability-card:hover {
             transform: none;
         }

@@ -39,10 +39,10 @@ import { Consts } from "@sandlada/consts.js"
 
         <section class="develop-information">
             <span>
-                <span class="body-medium wordmark">Sandlada</span>
+                <span class="wordmark">Sandlada</span>
             </span>
-            <a class="link" target="_blank" rel="noopener" href={Consts.Member.KaiOrion.GitHubProfileLink} aria-label="Open the GitHub profile of Kai Orion in a new tab">
-                <span class="body-medium">{Consts.Member.KaiOrion.FormalName}</span>
+            <a class="link " target="_blank" rel="noopener" href={Consts.Member.KaiOrion.GitHubProfileLink} aria-label="Open the GitHub profile of Kai Orion in a new tab">
+                <span class="wordmark">{Consts.Member.KaiOrion.FormalName}</span>
                 <md-focus-ring></md-focus-ring>
             </a>
         </section>
@@ -50,6 +50,8 @@ import { Consts } from "@sandlada/consts.js"
 </footer>
 
 <style>
+    @reference "../styles/tailwind.css";
+
     .footer-container {
         min-height: unset;
         box-sizing: border-box;
@@ -60,42 +62,47 @@ import { Consts } from "@sandlada/consts.js"
         overflow: auto;
         position: relative;
 
-        @media (width >=640px) {
-            max-width: 640px;
+        @media (width >= 60px) {
+            max-width: 60px;
         }
 
-        @media (width >=768px) {
-            max-width: 768px;
+        @media (width >= 840px) {
+            max-width: 840px;
         }
 
-        @media (width >=1024px) {
-            max-width: 1024px;
+        @media (width >=1200px) {
+            max-width: 1200px;
         }
 
-        @media (width >=1280px) {
-            max-width: 1280px;
+        @media (width >= 1600px) {
+            max-width: 1600;
         }
     }
 
     .website-footer.top-level {
-        box-sizing: border-box;
-        background-color: var(--md-sys-color-surface);
         z-index: 0;
         position: relative;
 
         & .develop-information {
             display: flex;
-            padding: 24px 0px;
-            gap: 16px;
+            align-items: end;
+            gap: 32px;
+            margin: 24px 0px;
             color: var(--md-sys-color-on-surface-variant);
 
             & .link {
                 all: unset;
+                display: inline-block;
                 cursor: pointer;
                 position: relative;
+                height: fit-content;
             }
             & .link:hover {
                 text-decoration-line: underline;
+            }
+
+            & .wordmark {
+                font-size: 48px;
             }
         }
 
@@ -109,12 +116,9 @@ import { Consts } from "@sandlada/consts.js"
                 all: unset;
                 cursor: pointer;
                 position: relative;
-                height: 40px;
-                width: 40px;
-
-                & > svg {
-                    fill: var(--md-sys-color-on-surface);
-                }
+                height: fit-content;
+                fill: currentColor;
+                color: var(--md-sys-color-on-surface);
             }
         }
     }
