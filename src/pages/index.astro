@@ -66,26 +66,30 @@ const Banners = [
         title: 'Building interfaces',
         description: 'Generate vibrant UIs, from component behaviors to intricate design tokens.',
         href: '#ui-library',
-        linkElementTextContent: 'Explore'
+        linkElementTextContent: 'Explore',
+        image: '/imgs/stack.webp',
 
     },
     {
         title: 'Simulating logic',
         description: 'Type-safe utilities, from Result handling to reactive breakpoint observers.',
-        href: '',
-        linkElementTextContent: 'Explore'
+        href: '#ts-js-library',
+        linkElementTextContent: 'Explore',
+        image: '/imgs/block.webp',
     },
     {
         title: 'Producing themes',
         description: 'Conjure light, dark and OLED worlds across VSCode, Zed and OpenCode.',
-        href: '',
-        linkElementTextContent: 'Explore'
+        href: '#extensions',
+        linkElementTextContent: 'Explore',
+        image: '/imgs/edit.webp',
     },
     {
         title: 'Exploring color',
         description: 'Transcend static palettes with dynamic schemes, MCU engine and theme CLI.',
-        href: '',
-        linkElementTextContent: 'Explore'
+        href: '#principles',
+        linkElementTextContent: 'Explore',
+        image: '/imgs/fast.webp',
     },
 ] as Array<Banner>
 
@@ -107,7 +111,7 @@ const uiLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MaterialDesignCSS.FormalName,
         title: "Material Design CSS",
         description: "A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.",
-        coverSrc: "/covers/material-design-css.svg",
+        coverSrc: "/covers/material-design-css.webp",
         coverAlt: "Glowing style braces for the Material Design CSS token package",
         actions: [
             { label: "GitHub", href: Consts.Repo.MaterialDesignCSS.GitHubLink },
@@ -119,7 +123,7 @@ const uiLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MDK.FormalName,
         title: "MDK",
         description: "A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.",
-        coverSrc: "/covers/mdk.svg",
+        coverSrc: "/covers/mdk.webp",
         coverAlt: "Glowing shape and data nodes for the MDK data library",
         actions: [
             { label: "GitHub", href: Consts.Repo.MDK.GitHubLink },
@@ -134,7 +138,7 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.Result.FormalName,
         title: "Result",
         description: "A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.",
-        coverSrc: "/covers/result.svg",
+        coverSrc: "/covers/result.webp",
         coverAlt: "Glowing check ring for the Result error-handling library",
         actions: [
             { label: "GitHub", href: Consts.Repo.Result.GitHubLink },
@@ -146,7 +150,7 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.Breakpoint.FormalName,
         title: "Breakpoint",
         description: "Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.",
-        coverSrc: "/covers/breakpoint.svg",
+        coverSrc: "/covers/breakpoint.webp",
         coverAlt: "Glowing ascending bars for the Breakpoint observer library",
         actions: [
             { label: "GitHub", href: Consts.Repo.Breakpoint.GitHubLink },
@@ -158,7 +162,7 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.DocumentContext.FormalName,
         title: "Document Context",
         description: "A function-first, DOM-anchored IoC container and reactive state management library for browsers.",
-        coverSrc: "/covers/document-context.svg",
+        coverSrc: "/covers/document-context.webp",
         coverAlt: "Glowing anchored document node for the Document Context library",
         actions: [
             { label: "GitHub", href: Consts.Repo.DocumentContext.GitHubLink },
@@ -170,7 +174,7 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MCUHelper.FormalName,
         title: "MCU Helper",
         description: "High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.",
-        coverSrc: "/covers/mcu-helper.svg",
+        coverSrc: "/covers/mcu-helper.webp",
         coverAlt: "Glowing dynamic color token ring for the MCU Helper engine",
         actions: [
             { label: "GitHub", href: Consts.Repo.MCUHelper.GitHubLink },
@@ -182,7 +186,7 @@ const tsJsLibraryProducts: Array<Product> = [
         packageName: Consts.Repo.MaterialThemeCLI.FormalName,
         title: "Material Theme CLI",
         description: "Material Design CLI for generating theme tokens and serialized color outputs from a source color.",
-        coverSrc: "/covers/material-theme-cli.svg",
+        coverSrc: "/covers/material-theme-cli.webp",
         coverAlt: "Glowing terminal prompt for the Material Theme CLI",
         actions: [
             { label: "GitHub", href: Consts.Repo.MaterialThemeCLI.GitHubLink },
@@ -197,7 +201,7 @@ const extensionProducts: Array<Product> = [
         packageName: Consts.Repo.VSCodeMaterialTheme.FormalName,
         title: 'VSCode Material Theme',
         description: "Material Design 3 theme for VSCode.",
-        coverSrc: "/covers/vscode-material-theme.svg",
+        coverSrc: "/covers/vscode-material-theme.webp",
         coverAlt: "Glowing frosted editor window for the VSCode Material theme",
         actions: [
             { label: "GitHub", href: Consts.Repo.VSCodeMaterialTheme.GitHubLink },
@@ -208,7 +212,7 @@ const extensionProducts: Array<Product> = [
         packageName: Consts.Repo.OpenCodeMaterialTheme.FormalName,
         title: "OpenCode Material Theme",
         description: "Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.",
-        coverSrc: "/covers/opencode-material-theme.svg",
+        coverSrc: "/covers/opencode-material-theme.webp",
         coverAlt: "Glowing terminal cell grid for the OpenCode Material theme",
         actions: [
             { label: "GitHub", href: Consts.Repo.OpenCodeMaterialTheme.GitHubLink },
@@ -220,7 +224,7 @@ const extensionProducts: Array<Product> = [
         packageName: Consts.Repo.ZedMaterialTheme.FormalName,
         title: "Zed Material Theme",
         description: "Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.",
-        coverSrc: "/covers/zed-material-theme.svg",
+        coverSrc: "/covers/zed-material-theme.webp",
         coverAlt: "Glowing double chevron for the Zed Material theme",
         actions: [
             { label: "GitHub", href: Consts.Repo.ZedMaterialTheme.GitHubLink },
@@ -232,7 +236,7 @@ const extensionProducts: Array<Product> = [
         packageName: Consts.Repo.MaterialVSCodeExtensions.FormalName,
         title: "Material VSCode Extensions",
         description: "VSCode snippets: Material Web Snippets and Material Design CSS Snippets.",
-        coverSrc: "/covers/material-vscode-extensions.svg",
+        coverSrc: "/covers/material-vscode-extensions.webp",
         coverAlt: "Glowing code brackets for the Material VSCode snippet extensions",
         actions: [
             { label: "GitHub", href: Consts.Repo.MaterialVSCodeExtensions.GitHubLink },
@@ -246,9 +250,25 @@ const extensionProducts: Array<Product> = [
     <BrandHeader />
 
     <main class="genie-page" id="page-content">
-        <video class="bg-video" loop muted autoplay playsinline preload="metadata">
-            <source src="/code.webm" type="video/webm" />
+        <video id="bg-video" class="bg-video" loop muted autoplay playsinline preload="metadata">
+            <source src="/imgs/code.webm" type="video/webm" />
         </video>
+        <script is:inline>
+            const SCROLL_LIMIT = 500
+            const OPACITY_LIMIT = 200
+            const toOpacity = (value, max = SCROLL_LIMIT) => {
+                return OPACITY_LIMIT - (value / max * 100)
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const video = document.querySelector('#bg-video')
+
+                window.addEventListener('scroll', (e) => {
+                    const position = (e.currentTarget).scrollY
+                    video.style.opacity = `${Math.max(5, toOpacity(position))}%`
+                }, { passive: true, })
+            })
+        </script>
         <style>
             .bg-video {
                 position: fixed;
@@ -258,6 +278,8 @@ const extensionProducts: Array<Product> = [
                 height: 100dvh;
                 object-fit: cover;
                 filter: hue-rotate(-85deg);
+                transition-property: opacity;
+                transition-duration: 200ms;
             }
             :root[dark] {
                 .bg-video {
