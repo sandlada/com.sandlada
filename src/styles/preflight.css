@@ -32,8 +32,8 @@ html,
   tab-size: 4; /* 3 */
   font-family: --theme(
     --default-font-family,
-    'Google Sans Code Variable',
-    'Google Sans Code',
+    'Google Sans Flex Variable',
+    'Google Sans Flex',
     ui-monospace,
     SFMono-Regular,
     Menlo,
@@ -126,8 +126,8 @@ samp,
 pre {
   font-family: --theme(
     --default-mono-font-family,
-    'Google Sans Code Variable',
-    'Google Sans Code',
+    'Google Sans Flex Variable',
+    'Google Sans Flex',
     ui-monospace,
     SFMono-Regular,
     Menlo,

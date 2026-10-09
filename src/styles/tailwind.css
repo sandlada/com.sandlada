@@ -8,9 +8,9 @@
 @import "@sandlada/material-design-css/prebuilt-colors/content/h150c60t60-2025-oled.css";
 
 @theme {
-    --font-sans: "Google Sans Code Variable", "Google Sans Code", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    --font-mono: "Google Sans Code Variable", "Google Sans Code", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    --font-display: "Pirata One", "Google Sans Code Variable", serif;
+    --font-sans: "Google Sans Flex Variable", "Google Sans Flex", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "Google Sans Flex Variable", "Google Sans Flex", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --font-display: "Pirata One", "Google Sans Flex Variable", sans-serif;
 }
 
 @layer reset {
@@ -35,54 +35,54 @@
 @layer base {
 
     :root {
-        --md-ref-typeface-brand: "Google Sans Code Variable";
-        --md-ref-typeface-plain: "Google Sans Code Variable";
+        --md-ref-typeface-brand: "Google Sans Flex Variable";
+        --md-ref-typeface-plain: "Google Sans Flex Variable";
 
-        --md-sys-typescale-body-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-body-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-body-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-display-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-display-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-display-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-headline-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-headline-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-headline-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-label-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-label-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-label-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-title-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-title-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-title-small-font: "Google Sans Code Variable";
+        --md-sys-typescale-body-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-body-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-body-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-display-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-display-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-display-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-headline-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-headline-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-headline-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-label-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-label-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-label-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-title-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-title-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-title-small-font: "Google Sans Flex Variable";
 
-        --md-sys-typescale-emphasized-body-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-body-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-body-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-display-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-display-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-display-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-headline-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-headline-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-headline-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-label-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-label-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-label-small-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-title-large-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-title-medium-font: "Google Sans Code Variable";
-        --md-sys-typescale-emphasized-title-small-font: "Google Sans Code Variable";
+        --md-sys-typescale-emphasized-body-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-body-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-body-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-display-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-display-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-display-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-headline-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-headline-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-headline-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-label-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-label-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-label-small-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-title-large-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-title-medium-font: "Google Sans Flex Variable";
+        --md-sys-typescale-emphasized-title-small-font: "Google Sans Flex Variable";
 
         background-color: var(--md-sys-color-surface);
     }
 
     body {
         margin: 0;
-        font-family: "Google Sans Code Variable", "Google Sans Code", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+        font-family: "Google Sans Flex Variable", "Google Sans Flex", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
     code,
     kbd,
     samp,
     pre {
-        font-family: "Google Sans Code Variable", "Google Sans Code", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+        font-family: "Google Sans Flex Variable", "Google Sans Flex", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     }
 
     astro-island {
@@ -182,5 +182,5 @@
 /* Brand wordmark: only the word "Sandlada" uses Pirata One (static 400).
    Unlayered so it wins over layered MD typescale utilities. */
 .wordmark {
-    font-family: "Pirata One", "Google Sans Code Variable", serif;
+    font-family: "Pirata One", "Google Sans Flex Variable", serif;
 }

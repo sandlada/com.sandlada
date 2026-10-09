@@ -4,6 +4,7 @@
     "exclude": ["dist"],
     "compilerOptions": {
         "strictNullChecks": true,
+        "target": "ESNext",
         "allowJs": true,
         "jsx": "preserve",
         "lib": ["DOM", "DOM.Iterable", "DOM.AsyncIterable", "ESNext"],

@@ -1,61 +1,184 @@
 ---
 import { Consts } from "@sandlada/consts.js";
+import OpenInBrowserSvg from "@material-design-icons/svg/round/open_in_browser.svg?raw"
 
 
 ---
 <section class="hero" aria-labelledby="genie-hero-title">
     <h1 class="title wordmark">Sandlada</h1>
-    <h2 class="subtitle">A New Frontier for<br /> OpenSource <span id="text-alter-target" class="text-alter-target">Libraries</span></h2>
+    <h2 class="subtitle">
+        <span class="subtitle-line subtitle-line-1">A New Frontier for</span>
+        <span class="subtitle-line subtitle-line-2">OpenSource <span id="text-alter-target" class="text-alter-target">libraries</span></span>
+    </h2>
+
     <span class="body">Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript utilities, and VSCode, Zed and OpenCode themes.</span>
+
     <div class="actions">
-        <a class="btn-pill-filled" href="#explore-latest">Explore libraries</a>
-        <a class="btn-pill-outlined" target="_blank" rel="noopener" href={Consts.Social.GitHub.Link}>View GitHub</a>
+        <a class="button-outlined" target="_blank" rel="noopener" href={Consts.Social.GitHub.Link}>
+            <span>View on GitHub</span>
+            <md-icon set:html={OpenInBrowserSvg}></md-icon>
+            <md-ripple></md-ripple>
+            <md-focus-ring></md-focus-ring>
+        </a>
     </div>
 </section>
 
+<script>
+    const TextCases = [
+        'libraries',
+        'extensions',
+        'components',
+        'tools',
+        'themes'
+    ] as const
+    type TextCase = typeof TextCases[number]
+
+    const ROTATE_INTERVAL_MS = 1000
+
+    const ENTER_ANIMATION: [Keyframe[], KeyframeAnimationOptions] = [
+        [
+            { 'opacity': '0', 'transform': 'translateY(-24px) scale(0.95)' },
+            { 'opacity': '1', 'transform': 'translateY(0px) scale(1)' },
+        ],
+        {
+            duration: 200,
+            easing: 'cubic-bezier(0.2, 0.0, 0, 1.0)',
+        }
+    ] as const
+
+    const EXIT_ANIMATION: [Keyframe[], KeyframeAnimationOptions] = [
+        [
+            { 'opacity': '1', 'transform': 'translateY(0px) scale(1)' },
+            { 'opacity': '0', 'transform': 'translateY(24px) scale(0.95)' },
+        ],
+        {
+            duration: 200,
+            easing: 'cubic-bezier(0.3, 0.0, 0.8, 0.15)',
+        }
+    ] as const
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const target = document.querySelector<HTMLElement>(`#text-alter-target`)
+        if (!target) return
+
+        /** Plays an animation and resolves once it finishes (or is cancelled). */
+        const play = (animation: [Keyframe[], KeyframeAnimationOptions]) =>
+            target.animate(...animation).finished.catch(() => {})
+
+        /** Fades the current word out, swaps the text, then fades the new one in. */
+        const swapText = async (textCase: TextCase) => {
+            await play(EXIT_ANIMATION)
+            target.textContent = textCase
+            await play(ENTER_ANIMATION)
+        }
+
+        let currentIndex = 0
+        target.textContent = TextCases[currentIndex]
+
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % TextCases.length
+            void swapText(TextCases[currentIndex])
+        }, ROTATE_INTERVAL_MS)
+    })
+</script>
 
 <style>
     @reference "../styles/tailwind.css";
 
     .hero {
         position: relative;
-        width: 100%;
-        max-width: 840px;
         z-index: 0;
         height: fit-content;
         overflow: clip;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100%;
         margin-top: 48px;
         margin-bottom: 96px;
+        padding: 8px;
+
+        margin-inline: 48px;
+
+        @media (width >= 600px) {
+            margin-inline: 96px;
+        }
+        @media (width >= 840px) {
+            margin-inline: 192px;
+        }
+        @media (width >= 1200px) {
+            margin-inline: 284px;
+        }
+        @media (width >= 1600px) {
+            margin-inline: 368px;
+        }
 
         & h1.title {
             all: unset;
             display: inline-flex;
             font-size: 96px;
             font-weight: 400;
-            margin-block: 48px 0px;
+            margin-block: 48px 24px;
             @apply font-display;
         }
         & h2.subtitle {
-            @apply display-large;
-            margin-block: 24px;
+            position: relative;
+            display: block;
+            inline-size: fit-content;
+            text-align: left;
+
+            @apply headline-small;
+            @media (width >= 600px) {
+                @apply display-small;
+            }
+            @media (width >= 840px) {
+                @apply display-medium;
+            }
+            @media (width >= 1200px) {
+                @apply display-large;
+            }
+
             font-weight: 900;
+        }
+        & .subtitle-line {
+            display: block;
+            white-space: nowrap;
         }
         & .body {
-            @apply body-medium text-on-surface-variant;
+            @apply body-large text-on-surface-variant;
             max-width: 680px;
+            margin-block: 48px 24px;
         }
         & .text-alter-target {
-            font-weight: 900;
-            @apply uppercase;
+            display: inline-block;
+            position: relative;
+            text-transform: uppercase;
+            transition-property: color, background, transform;
+            transition-duration: 200ms;
+            transform-origin: center;
         }
 
         & .actions {
             display: flex;
+            gap: 8px;
+            margin-block: 24px 24px;
+
+            & a.button-outlined {
+                all: unset;
+                position: relative;
+                cursor: pointer;
+                height: 48px;
+                min-width: 64px;
+                padding-inline: 24px;
+                padding-block: px;
+                display: inline-flex;
+                gap: 8px;
+                align-items: center;
+                border-radius: var(--md-sys-shape-corner-value-extra-large);
+
+                fill: currentColor;
+                background: var(--md-sys-color-primary-container);
+                color: var(--md-sys-color-on-primary);
+            }
         }
     }
 

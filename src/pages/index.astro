@@ -3,6 +3,7 @@ import BrandFooter from "@modules/brand-footer/BrandFooter.astro"
 import BrandHeader from "@modules/BrandHeader.astro"
 import Hero from "@modules/Hero.astro"
 import RootHTML from "@modules/html-structure/RootHTML.astro"
+import ScrollingBanner, { type Banner } from "@modules/ScrollingBanner.astro"
 import { Consts } from "@sandlada/consts.js"
 
 const siteUrl = "https://sandlada.com"
@@ -58,13 +59,39 @@ const structuredData = [
         })),
     },
 ]
+
+const Banners = [
+    {
+        title: 'Building interfaces',
+        description: 'Generate vibrant UIs, from component behaviors to intricate design tokens.',
+        href: '#ui-library',
+        linkElementTextContent: 'Explore'
+
+    },
+    {
+        title: 'Simulating logic',
+        description: 'Type-safe utilities, from Result handling to reactive breakpoint observers.',
+        href: '',
+        linkElementTextContent: 'Explore'
+    },
+    {
+        title: 'Producing themes',
+        description: 'Conjure light, dark and OLED worlds across VSCode, Zed and OpenCode.',
+        href: '',
+        linkElementTextContent: 'Explore'
+    },
+    {
+        title: 'Exploring color',
+        description: 'Transcend static palettes with dynamic schemes, MCU engine and theme CLI.',
+        href: '',
+        linkElementTextContent: 'Explore'
+    },
+] as Array<Banner>
 ---
 
 <RootHTML title={pageTitle} description={pageDescription} structuredData={structuredData}>
 
-    <div class="width-container">
-        <BrandHeader />
-    </div>
+    <BrandHeader />
 
     <main class="genie-page" id="page-content">
         <video class="bg-video" loop muted autoplay playsinline preload="metadata">
@@ -89,51 +116,7 @@ const structuredData = [
 
         <Hero></Hero>
 
-        <section class="showcase" id="explore-latest" aria-label="Featured collections">
-            <div class="showcase-viewport" id="showcase-viewport">
-                <div class="showcase-track" id="showcase-track">
-                    <article class="showcase-card visual-primary" aria-roledescription="slide" aria-label="1 of 4">
-                        <div class="showcase-overlay">
-                            <h2>Building interfaces</h2>
-                            <p>Generate vibrant UIs, from component behaviors to intricate design tokens.</p>
-                            <a class="btn-ghost" href="#ui-library">Explore UI Library</a>
-                        </div>
-                    </article>
-                    <article class="showcase-card visual-secondary" aria-roledescription="slide" aria-label="2 of 4">
-                        <div class="showcase-overlay">
-                            <h2>Simulating logic</h2>
-                            <p>Type-safe utilities, from Result handling to reactive breakpoint observers.</p>
-                            <a class="btn-ghost" href="#ts-js-library">Explore TS / JS Library</a>
-                        </div>
-                    </article>
-                    <article class="showcase-card visual-tertiary" aria-roledescription="slide" aria-label="3 of 4">
-                        <div class="showcase-overlay">
-                            <h2>Producing themes</h2>
-                            <p>Conjure light, dark and OLED worlds across VSCode, Zed and OpenCode.</p>
-                            <a class="btn-ghost" href="#extensions">Explore Extensions</a>
-                        </div>
-                    </article>
-                    <article class="showcase-card visual-dark" aria-roledescription="slide" aria-label="4 of 4">
-                        <div class="showcase-overlay">
-                            <h2>Exploring color</h2>
-                            <p>Transcend static palettes with dynamic schemes, MCU engine and theme CLI.</p>
-                            <a class="btn-ghost" target="_blank" rel="noopener" href={Consts.Repo.MCUHelper.GitHubLink}>Try MCU Helper</a>
-                        </div>
-                    </article>
-                </div>
-            </div>
-            <div class="showcase-meta width-container">
-                <p>Explore the latest <span class="showcase-count" id="showcase-count" aria-live="polite">1 / 4</span></p>
-                <div class="showcase-controls">
-                    <button class="control-btn" id="showcase-prev" type="button" aria-label="Previous slide">
-                        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </button>
-                    <button class="control-btn" id="showcase-next" type="button" aria-label="Next slide">
-                        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    </button>
-                </div>
-            </div>
-        </section>
+        <ScrollingBanner banners={Banners} />
 
         <section class="statement width-container" aria-label="Introduction">
             <h2 class="statement-text"><span class="wordmark">Sandlada</span> is a general-purpose open-source team. It uses simple Material Design 3 tokens to generate photorealistic interfaces that can be explored in real time.</h2>
@@ -343,84 +326,6 @@ const structuredData = [
 
 </RootHTML>
 
-<script>
-    document.addEventListener("astro:page-load", () => {
-        const viewport = document.querySelector("#showcase-viewport")
-        const track = document.querySelector("#showcase-track")
-        const prev = document.querySelector("#showcase-prev")
-        const next = document.querySelector("#showcase-next")
-        const count = document.querySelector("#showcase-count")
-        if (!(viewport instanceof HTMLElement) || !(track instanceof HTMLElement)) {
-            return
-        }
-        const cards = Array.from(track.querySelectorAll(".showcase-card"))
-        if (cards.length === 0) {
-            return
-        }
-        const step = () => {
-            const card = cards[0]
-            if (!(card instanceof HTMLElement)) {
-                return viewport.clientWidth * 0.8
-            }
-            return card.clientWidth + 12
-        }
-        const currentIndex = () => {
-            const center = viewport.scrollLeft + viewport.clientWidth / 2
-            let best = 0
-            let bestDistance = Number.POSITIVE_INFINITY
-            cards.forEach((card, index) => {
-                if (!(card instanceof HTMLElement)) {
-                    return
-                }
-                const cardCenter = card.offsetLeft + card.clientWidth / 2
-                const distance = Math.abs(cardCenter - center)
-                if (distance < bestDistance) {
-                    bestDistance = distance
-                    best = index
-                }
-            })
-            return best
-        }
-        const updateCount = () => {
-            if (count) {
-                count.textContent = `${currentIndex() + 1} / ${cards.length}`
-            }
-        }
-        const goTo = (index: number) => {
-            const target = cards[(index + cards.length) % cards.length]
-            if (target instanceof HTMLElement) {
-                viewport.scrollTo({ left: target.offsetLeft - (viewport.clientWidth - target.clientWidth) / 2, behavior: "smooth" })
-            }
-        }
-        if (!(prev instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) {
-            return
-        }
-        if (prev.dataset.bound === "true") {
-            return
-        }
-        prev.dataset.bound = "true"
-        next.dataset.bound = "true"
-        prev.addEventListener("click", () => {
-            goTo(currentIndex() - 1)
-        })
-        next.addEventListener("click", () => {
-            goTo(currentIndex() + 1)
-        })
-        viewport.addEventListener("scroll", updateCount, { passive: true })
-        viewport.addEventListener("keydown", (event) => {
-            if (event.key === "ArrowLeft") {
-                event.preventDefault()
-                goTo(currentIndex() - 1)
-            }
-            if (event.key === "ArrowRight") {
-                event.preventDefault()
-                goTo(currentIndex() + 1)
-            }
-        })
-        updateCount()
-    })
-</script>
-
 <style>
 
     .divider {
@@ -495,290 +400,6 @@ const structuredData = [
         &:hover {
             background-color: var(--md-sys-color-surface-container-high);
             border-color: var(--md-sys-color-outline);
-        }
-    }
-
-    .showcase {
-        display: block;
-        margin-bottom: 16px;
-        scroll-margin-top: 16px;
-    }
-
-    .showcase-viewport {
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-padding-inline: max(12px, calc((100vw - 1080px) / 2 + 12px));
-        scrollbar-width: none;
-        cursor: grab;
-        padding-left: max(12px, calc((100vw - 1080px) / 2 + 12px));
-        padding-right: max(12px, calc((100vw - 1080px) / 2 + 12px));
-
-        &:active {
-            cursor: grabbing;
-        }
-
-        &:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary);
-            outline-offset: -2px;
-        }
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    .showcase-track {
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: min(82vw, 760px);
-        grid-template-rows: 1fr;
-        gap: 12px;
-
-        @media (width >= 840px) {
-            grid-auto-columns: min(68vw, 860px);
-        }
-    }
-
-    .showcase-card {
-        position: relative;
-        scroll-snap-align: center;
-        overflow: hidden;
-        border-radius: 28px;
-        min-height: 440px;
-        aspect-ratio: 16 / 10;
-        max-height: 620px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        box-sizing: border-box;
-        padding: 32px 32px 28px 32px;
-        isolation: isolate;
-        background-color: var(--md-sys-color-surface-container-high);
-        box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 28px -12px rgb(0 0 0 / 0.22);
-        transition: transform 240ms ease, box-shadow 240ms ease;
-
-        &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgb(0 0 0 / 0.08), 0 16px 40px -16px rgb(0 0 0 / 0.28);
-        }
-
-        &::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: -2;
-            transition: transform 480ms ease;
-        }
-
-        &:hover::before {
-            transform: scale(1.015);
-        }
-
-        &::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            background: linear-gradient(to bottom, rgb(0 0 0 / 0.32) 0%, rgb(0 0 0 / 0.08) 30%, transparent 48%);
-        }
-
-        &.visual-primary::before {
-            background:
-                radial-gradient(42% 36% at 24% 18%, rgb(255 255 255 / 0.9) 0%, transparent 70%),
-                radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--md-sys-color-primary) 72%, white) 0%, transparent 55%),
-                linear-gradient(160deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-secondary-container) 52%, var(--md-sys-color-tertiary-container) 100%);
-        }
-
-        &.visual-secondary::before {
-            background:
-                radial-gradient(38% 32% at 78% 22%, rgb(255 255 255 / 0.85) 0%, transparent 68%),
-                radial-gradient(100% 80% at 80% 20%, color-mix(in srgb, var(--md-sys-color-tertiary) 55%, white) 0%, transparent 50%),
-                linear-gradient(165deg, var(--md-sys-color-secondary-container) 0%, var(--md-sys-color-surface-container-highest) 55%, var(--md-sys-color-primary-container) 100%);
-        }
-
-        &.visual-tertiary::before {
-            background:
-                radial-gradient(46% 38% at 30% 16%, rgb(255 255 255 / 0.5) 0%, transparent 70%),
-                radial-gradient(110% 85% at 30% 15%, color-mix(in srgb, var(--md-sys-color-tertiary-container) 90%, white) 0%, transparent 60%),
-                linear-gradient(155deg, var(--md-sys-color-tertiary-container) 0%, var(--md-sys-color-primary) 58%, #0b0b18 100%);
-        }
-
-        &.visual-dark::before {
-            background:
-                radial-gradient(28% 22% at 72% 18%, rgb(255 255 255 / 0.72) 0%, rgb(255 255 255 / 0.12) 32%, transparent 68%),
-                radial-gradient(90% 70% at 70% 20%, #4a4a6a 0%, transparent 55%),
-                radial-gradient(70% 55% at 50% 88%, #8a6a5a 0%, transparent 60%),
-                linear-gradient(180deg, #0b0e2a 0%, #2a2438 52%, #5a4a52 100%);
-        }
-    }
-
-    .showcase-overlay {
-        max-width: 44ch;
-        text-wrap: balance;
-
-        & > h2 {
-            margin: 0;
-            font-size: 22px;
-            line-height: 28px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-            color: #ffffff;
-            text-shadow: 0 1px 2px rgb(0 0 0 / 0.32), 0 4px 16px rgb(0 0 0 / 0.28);
-        }
-
-        & > p {
-            margin: 8px 0 0 0;
-            max-width: 36ch;
-            font-size: 16px;
-            line-height: 24px;
-            font-weight: 400;
-            color: rgb(255 255 255 / 0.94);
-            text-shadow: 0 1px 2px rgb(0 0 0 / 0.32), 0 4px 16px rgb(0 0 0 / 0.24);
-            text-wrap: pretty;
-        }
-
-        .visual-primary &,
-        .visual-secondary & {
-            & > h2 {
-                color: var(--md-sys-color-on-primary-container);
-                text-shadow: none;
-            }
-
-            & > p {
-                color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 88%, transparent);
-                text-shadow: none;
-            }
-        }
-
-        .visual-primary &::after,
-        .visual-secondary &::after {
-            content: none;
-        }
-    }
-
-    .btn-ghost {
-        display: inline-flex;
-        align-items: center;
-        margin-top: 18px;
-        min-height: 38px;
-        padding: 0 18px;
-        border-radius: 999px;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 500;
-        letter-spacing: 0.1px;
-        text-decoration: none;
-        text-shadow: none;
-        color: #ffffff;
-        background: rgb(18 18 18 / 0.44);
-        border: 1px solid rgb(255 255 255 / 0.38);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
-
-        &:hover {
-            background: rgb(18 18 18 / 0.6);
-            border-color: rgb(255 255 255 / 0.6);
-        }
-
-        &:active {
-            transform: scale(0.98);
-        }
-
-        &:focus-visible {
-            outline: 2px solid #ffffff;
-            outline-offset: 2px;
-        }
-
-        .visual-primary &,
-        .visual-secondary & {
-            color: var(--md-sys-color-on-secondary-container);
-            background: color-mix(in srgb, var(--md-sys-color-surface) 78%, transparent);
-            border-color: var(--md-sys-color-outline-variant);
-        }
-
-        .visual-primary &:hover,
-        .visual-secondary &:hover {
-            background: var(--md-sys-color-surface);
-        }
-
-        .visual-primary &:focus-visible,
-        .visual-secondary &:focus-visible {
-            outline-color: var(--md-sys-color-primary);
-        }
-    }
-
-    .showcase-meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 14px 12px 0 12px;
-        box-sizing: border-box;
-
-        & > p {
-            margin: 0;
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            font-size: 14px;
-            line-height: 20px;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-    }
-
-    .showcase-count {
-        font-size: 12px;
-        line-height: 16px;
-        font-variant-numeric: tabular-nums;
-        color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 72%, transparent);
-    }
-
-    .showcase-controls {
-        display: inline-flex;
-        align-items: center;
-        gap: 2px;
-        padding: 4px;
-        border-radius: 999px;
-        background-color: var(--md-sys-color-surface-container-high);
-        border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 64%, transparent);
-    }
-
-    .control-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 999px;
-        border: 0;
-        cursor: pointer;
-        color: var(--md-sys-color-on-surface-variant);
-        background: transparent;
-        transition: background 160ms ease, color 160ms ease, transform 160ms ease;
-
-        &:hover {
-            background-color: var(--md-sys-color-surface-container-highest);
-            color: var(--md-sys-color-on-surface);
-        }
-
-        &:active {
-            transform: scale(0.94);
-        }
-
-        &:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary);
-            outline-offset: 2px;
-        }
-
-        &:disabled {
-            opacity: 0.38;
-            cursor: default;
-        }
-
-        & > svg {
-            display: block;
         }
     }
 
@@ -1153,38 +774,16 @@ const structuredData = [
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .showcase-viewport {
-            scroll-behavior: auto;
-        }
-
-        .showcase-card,
-        .showcase-card::before,
-        .btn-ghost,
         .btn-pill-filled,
         .btn-pill-outlined,
-        .control-btn,
         .product,
         .capability-card {
             transition: none;
         }
 
-        .showcase-card:hover,
-        .showcase-card:hover::before,
         .product:hover,
         .capability-card:hover {
             transform: none;
-        }
-    }
-
-    @media (width < 480px) {
-        .showcase-card {
-            min-height: 400px;
-            padding: 24px 22px;
-        }
-
-        .showcase-overlay > p {
-            font-size: 15px;
-            line-height: 22px;
         }
     }
 
