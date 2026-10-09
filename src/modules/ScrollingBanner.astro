@@ -1,0 +1,440 @@
+---
+export interface Banner {
+    title: string;
+    description: string;
+    href: string;
+    linkElementTextContent: string;
+    image: string
+}
+
+interface Props {
+    banners: Array<Banner>;
+}
+
+const { banners } = Astro.props;
+---
+
+<section
+    class="showcase"
+    id="explore-latest"
+    data-showcase
+    aria-label="Featured collections"
+>
+    <div class="showcase-viewport" data-showcase-viewport>
+        <div class="showcase-track" data-showcase-track>
+            {
+                banners.map((banner, index) => (
+                    <article
+                        class="showcase-card"
+                        data-showcase-card
+                        role="group"
+                        aria-roledescription="slide"
+                        aria-label={`${index + 1} of ${banners.length}`}
+                    >
+                        <div class="showcase-content">
+                            <h2 class="showcase-title">{banner.title}</h2>
+                            <p class="showcase-description">
+                                {banner.description}
+                            </p>
+                            <a class="showcase-link" href={banner.href}>
+                                {banner.linkElementTextContent}
+                                <md-ripple></md-ripple>
+                                <md-focus-ring></md-focus-ring>
+                            </a>
+                            <img
+                                class="bg-img"
+                                src={banner.image}
+                                alt=""
+                                aria-hidden="true"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        </div>
+                    </article>
+                ))
+            }
+        </div>
+    </div>
+
+    <div class="showcase-meta">
+        <p class="showcase-status">
+            Explore the latest &nbsp;
+            <span class="showcase-index" data-showcase-index aria-live="polite"
+                >1 / {banners.length}</span
+            >
+        </p>
+        <div class="showcase-controls">
+            <button
+                class="showcase-control"
+                data-showcase-prev
+                type="button"
+                aria-label="Previous slide"
+            >
+                <mdc-ripple></mdc-ripple>
+                <md-focus-ring></md-focus-ring>
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    aria-hidden="true"
+                    ><path
+                        d="M10 3 5 8l5 5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path></svg
+                >
+            </button>
+            <button
+                class="showcase-control"
+                data-showcase-next
+                type="button"
+                aria-label="Next slide"
+            >
+                <mdc-ripple></mdc-ripple>
+                <md-focus-ring></md-focus-ring>
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    aria-hidden="true"
+                    ><path
+                        d="M6 3l5 5-5 5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path></svg
+                >
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+    /** Hooks shared between the markup and the script. */
+    const ShowcaseSelector = {
+        root: "[data-showcase]",
+        viewport: "[data-showcase-viewport]",
+        track: "[data-showcase-track]",
+        card: "[data-showcase-card]",
+        index: "[data-showcase-index]",
+        prev: "[data-showcase-prev]",
+        next: "[data-showcase-next]",
+    } as const;
+
+    const clamp = (value: number, min: number, max: number) =>
+        Math.min(Math.max(value, min), max);
+
+    const initShowcase = (root: HTMLElement) => {
+        const viewport = root.querySelector<HTMLElement>(
+            ShowcaseSelector.viewport,
+        );
+        const track = root.querySelector<HTMLElement>(ShowcaseSelector.track);
+        const indexLabel = root.querySelector<HTMLElement>(
+            ShowcaseSelector.index,
+        );
+        const prevButton = root.querySelector<HTMLButtonElement>(
+            ShowcaseSelector.prev,
+        );
+        const nextButton = root.querySelector<HTMLButtonElement>(
+            ShowcaseSelector.next,
+        );
+
+        if (!viewport || !track) {
+            return;
+        }
+
+        const cards = Array.from(
+            track.querySelectorAll<HTMLElement>(ShowcaseSelector.card),
+        );
+        if (cards.length === 0) {
+            return;
+        }
+
+        /** Index of the card whose center is closest to the viewport center. */
+        const getActiveIndex = () => {
+            const center =
+                viewport.getBoundingClientRect().left +
+                viewport.clientWidth / 2;
+            let activeIndex = 0;
+            let closestDistance = Number.POSITIVE_INFINITY;
+
+            cards.forEach((card, index) => {
+                const rect = card.getBoundingClientRect();
+                const distance = Math.abs(rect.left + rect.width / 2 - center);
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    activeIndex = index;
+                }
+            });
+
+            return activeIndex;
+        };
+
+        /** Show the active position in the "current / total" label. */
+        const renderIndex = (index: number) => {
+            if (indexLabel) {
+                indexLabel.textContent = `${index + 1} / ${cards.length}`;
+            }
+        };
+
+        /** Center the given card in the viewport. */
+        const goToCard = (index: number) => {
+            const targetIndex = clamp(index, 0, cards.length - 1);
+            cards[targetIndex].scrollIntoView({
+                behavior: "smooth",
+                inline: "center",
+                block: "nearest",
+            });
+            renderIndex(targetIndex);
+        };
+
+        prevButton?.addEventListener("click", () =>
+            goToCard(getActiveIndex() - 1),
+        );
+        nextButton?.addEventListener("click", () =>
+            goToCard(getActiveIndex() + 1),
+        );
+
+        // Keep the label in sync while the user scrolls or drags by hand.
+        viewport.addEventListener(
+            "scroll",
+            () => renderIndex(getActiveIndex()),
+            { passive: true },
+        );
+
+        renderIndex(getActiveIndex());
+    };
+
+    const initShowcases = () => {
+        document
+            .querySelectorAll<HTMLElement>(ShowcaseSelector.root)
+            .forEach(initShowcase);
+    };
+
+    document.addEventListener("astro:page-load", initShowcases);
+</script>
+
+<style>
+    .showcase {
+        position: relative;
+        display: block;
+        margin-bottom: 16px;
+        scroll-margin-top: 16px;
+
+    }
+
+    .showcase-viewport {
+        --showcase-card-width: min(82vw, 760px);
+        --showcase-gap: 12px;
+        border-radius: var(--md-sys-shape-corner-value-extra-large);
+        overflow: clip;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        cursor: grab;
+
+        @media (width >= 840px) {
+            --showcase-card-width: min(68vw, 860px);
+        }
+
+        &:active {
+            cursor: grabbing;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary);
+            outline-offset: -2px;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .showcase-track {
+        display: flex;
+        gap: var(--showcase-gap);
+
+        /* 首尾留白，讓第一張與最後一張卡片能捲動到視窗正中央 */
+        &::before,
+        &::after {
+            content: "";
+            flex: 0 0 auto;
+            width: max(
+                0px,
+                calc(
+                    (100% - var(--showcase-card-width)) / 2 -
+                        var(--showcase-gap)
+                )
+            );
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .showcase-viewport {
+            scroll-behavior: auto;
+        }
+
+        .showcase-card,
+        .showcase-card::before,
+        .showcase-link,
+        .showcase-control {
+            transition: none;
+        }
+
+        .showcase-card:hover,
+        .showcase-card:hover::before {
+            transform: none;
+        }
+    }
+
+    @media (width < 480px) {
+        .showcase-card {
+            min-height: 400px;
+            padding: 24px 22px;
+        }
+
+        .showcase-description {
+            font-size: 15px;
+            line-height: 22px;
+        }
+    }
+</style>
+
+<style>
+    @reference "../styles/tailwind.css";
+
+    .showcase-card {
+        position: relative;
+        flex: 0 0 var(--showcase-card-width);
+        scroll-snap-align: center;
+        overflow: hidden;
+        border-radius: var(--md-sys-shape-corner-value-large);
+        min-height: 440px;
+        aspect-ratio: 16 / 10;
+        max-height: 620px;
+        display: grid;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        padding: 32px 32px 28px 32px;
+        isolation: isolate;
+        background-color: var(--md-sys-color-surface-container-high);
+    }
+
+    .showcase-content {
+        max-width: 44ch;
+        text-wrap: balance;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .showcase-title {
+        @apply title-medium text-on-surface;
+    }
+
+    .showcase-description {
+        @apply body-medium text-on-surface-variant;
+        margin-block: 12px;
+        max-width: 36ch;
+        text-wrap: pretty;
+    }
+
+    .showcase-link {
+        all: unset;
+        @apply body-medium bg-secondary text-on-secondary relative;
+        cursor: pointer;
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 4px 24px;
+        border-radius: 999px;
+    }
+
+    .bg-img {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: hue-rotate(255deg);
+    }
+    :root[dark] .bg-img {
+        filter: invert(100%) hue-rotate(105deg);
+    }
+</style>
+
+<style>
+    @reference "../styles/tailwind.css";
+
+    .showcase-meta {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-block: 8px;
+    }
+
+    .showcase-status {
+        display: flex;
+        @apply label-medium text-on-surface-variant;
+    }
+
+    .showcase-index {
+        font-variant-numeric: tabular-nums;
+    }
+
+    .showcase-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        border-radius: 999px;
+        padding: 4px;
+        @apply bg-surface-container-highest;
+    }
+
+    .showcase-control {
+        all: unset;
+        @apply bg-surface text-on-surface;
+        fill: currentColor;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
+        cursor: pointer;
+        position: relative;
+
+        &:first-child {
+            border-start-start-radius: 999px;
+            --md-focus-ring-shape-start-end: var(--md-sys-shape-corner-value-large);
+            border-start-end-radius: var(--md-sys-shape-corner-value-large);
+            border-end-start-radius: 999px;
+            --md-focus-ring-shape-end-end: var(--md-sys-shape-corner-value-large);
+            border-end-end-radius: var(--md-sys-shape-corner-value-large);
+        }
+        &:last-child {
+            --md-focus-ring-shape-start-start: var(--md-sys-shape-corner-value-large);
+            border-start-start-radius: var(--md-sys-shape-corner-value-large);
+            border-start-end-radius: 999px;
+            --md-focus-ring-shape-end-start: var(--md-sys-shape-corner-value-large);
+            border-end-start-radius: var(--md-sys-shape-corner-value-large);
+            border-end-end-radius: 999px;
+        }
+
+        &:disabled {
+            opacity: 0.38;
+            cursor: not-allowed;
+        }
+    }
+</style>

@@ -1,10 +1,12 @@
 ---
-import "@fontsource-variable/noto-sans"
+import "@fontsource/pirata-one"
+import "@fontsource-variable/google-sans-flex/wght.css"
+import "@fontsource-variable/google-sans-flex/wdth.css"
 import "@styles/tailwind.css"
+import PirataOneLatin from "@fontsource/pirata-one/files/pirata-one-latin-400-normal.woff2"
 import PageMeta from "@sandlada/astro-page-meta"
 import type { IPageMeta } from "@sandlada/astro-page-meta/types"
 import { ClientRouter } from "astro:transitions"
-import SandladaCoverImage from "../../../public/sandlada-cover.png"
 import SandladaIcon from "../../../public/sandlada.svg"
 
 interface Props extends IPageMeta {
@@ -16,6 +18,10 @@ interface Props extends IPageMeta {
     structuredData?: Record<string, unknown> | Array<Record<string, unknown>>
 }
 
+const site = Astro.site ?? Astro.url
+// Stable, non-hashed cover URL so social embeds and structured data always agree.
+const defaultImageUrl = new URL("/sandlada-cover.png", site).href
+
 const {
     language = "en",
     title,
@@ -25,8 +31,9 @@ const {
     applicationName = "Sandlada",
     ogSiteName = "Sandlada",
     ogLocale,
-    image = SandladaCoverImage,
+    image = defaultImageUrl,
     imageAlt = "Sandlada open source Material Design UI libraries and TypeScript tools",
+    ogImage,
     icon = SandladaIcon,
     url,
     themeColorLight = "#f9f9f9",
@@ -39,14 +46,26 @@ const {
     ...rest
 } = Astro.props
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
+const canonicalUrl = new URL(Astro.url.pathname, site).href
 const resolvedUrl = url ?? canonicalUrl
 const resolvedOgLocale = ogLocale ?? (language === "en" ? "en-US" : language)
+const resolvedOgImage =
+    ogImage ??
+    (typeof image === "string"
+        ? {
+            ogImageUrl: image,
+            ogImageType: "image/png",
+            ogImageWidth: 1280,
+            ogImageHeight: 640,
+            ogImageAlt: imageAlt,
+        }
+        : image)
 ---
 
 <!doctype html>
-<html lang={language}>
+<html lang={language} dir="ltr">
     <head>
+        <link rel="preload" href={PirataOneLatin} as="font" type="font/woff2" crossorigin />
         <PageMeta
             title={title}
             description={description}
@@ -57,6 +76,7 @@ const resolvedOgLocale = ogLocale ?? (language === "en" ? "en-US" : language)
             ogLocale={resolvedOgLocale}
             image={image}
             imageAlt={imageAlt}
+            ogImage={resolvedOgImage}
             icon={icon}
             url={resolvedUrl}
             themeColorLight={themeColorLight}
@@ -71,9 +91,40 @@ const resolvedOgLocale = ogLocale ?? (language === "en" ? "en-US" : language)
         <ClientRouter />
     </head>
     <body>
+        <a class="skip-link" href="#main-content">Skip to main content</a>
         <slot />
     </body>
 </html>
+
+<style>
+    .skip-link {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1080;
+        display: inline-flex;
+        align-items: center;
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        color: var(--md-sys-color-on-primary-container);
+        background-color: var(--md-sys-color-primary-container);
+        box-shadow: 0 2px 8px color-mix(in srgb, var(--md-sys-color-shadow, #000000) 32%, transparent);
+        transform: translateY(-200%);
+        transition: transform 160ms ease;
+    }
+    .skip-link:focus {
+        transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .skip-link {
+            transition: none;
+        }
+    }
+</style>
 
 <script>
     import { isDark } from "../../stores/is-dark"

@@ -1,12 +1,12 @@
 ---
-import HeaderLink from "./HeaderLink.astro"
 import LightModeSvg from "@material-design-icons/svg/round/light_mode.svg?raw"
 import DarkModeSvg from "@material-design-icons/svg/round/dark_mode.svg?raw"
 ---
 
 <header class="brand-header">
     <nav class="navigation-links">
-        <HeaderLink href="/">Sandlada</HeaderLink>
+        <a href="/" target="_self"><span class="label">Sandlada</span></a>
+        <span class="uppercase">open source</span>
     </nav>
 
     <div class="actions">
@@ -23,7 +23,7 @@ import DarkModeSvg from "@material-design-icons/svg/round/dark_mode.svg?raw"
 </script>
 
 <script>
-    import { isDark } from "../../stores/is-dark"
+    import { isDark } from "../stores/is-dark"
     document.addEventListener("astro:page-load", () => {
         const themeToggleButton = document.querySelector("#header-theme-toggle")
 
@@ -66,18 +66,25 @@ import DarkModeSvg from "@material-design-icons/svg/round/dark_mode.svg?raw"
 </script>
 
 <style>
+    @reference "../styles/tailwind.css";
     .brand-header {
         display: flex;
         align-items: center;
-        padding-inline-start: 12px;
-        padding-inline-end: 12px;
         gap: 12px;
-        height: 56px;
+        height: 64px;
 
         & > .navigation-links {
+            @apply label-medium;
             display: flex;
+            align-items: center;
             flex-grow: 1;
             gap: 12px;
+
+            & a {
+                all: unset;
+                cursor: pointer;
+                @apply emphasized-label-medium;
+            }
         }
 
         & > .actions {
