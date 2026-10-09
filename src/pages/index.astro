@@ -9,57 +9,106 @@ import { Consts } from "@sandlada/consts.js"
 
 const siteUrl = "https://sandlada.com"
 const pageTitle = "Sandlada – Material Design UI, TS Libraries & Themes"
-const pageDescription =
-    "Sandlada (sandbox) is an open-source team by Kai Orion building Material Design 3 UI libraries, TypeScript utilities, VSCode, Zed and OpenCode themes, and color tools."
+const pageDescription = "Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript utilities, a color engine, and VSCode, Zed and OpenCode themes."
 
-const productList = [
-    { name: "MDC", description: "An open source component library that follows the Material Design 3 design specifications.", url: Consts.Repo.MDC.GitHubLink },
-    { name: "Material Design CSS", description: "A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.", url: Consts.Repo.MaterialDesignCSS.GitHubLink },
-    { name: "MDK", description: "A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.", url: Consts.Repo.MDK.GitHubLink },
-    { name: "Result", description: "A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.", url: Consts.Repo.Result.GitHubLink },
-    { name: "Breakpoint", description: "Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.", url: Consts.Repo.Breakpoint.GitHubLink },
-    { name: "Document Context", description: "A function-first, DOM-anchored IoC container and reactive state management library for browsers.", url: Consts.Repo.DocumentContext.GitHubLink },
-    { name: "MCU Helper", description: "High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.", url: Consts.Repo.MCUHelper.GitHubLink },
-    { name: "Material Theme CLI", description: "Material Design CLI for generating theme tokens and serialized color outputs from a source color.", url: Consts.Repo.MaterialThemeCLI.GitHubLink },
-    { name: "VSCode Material Theme ", description: "Material Design 3 theme for VSCode.", url: Consts.Repo.VSCodeMaterialTheme.GitHubLink },
-    { name: "OpenCode Material Theme", description: "Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.", url: Consts.Repo.OpenCodeMaterialTheme.GitHubLink },
-    { name: "Zed Material Theme", description: "Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.", url: Consts.Repo.ZedMaterialTheme.GitHubLink },
-    { name: "Material VSCode Extensions", description: "VSCode snippets: Material Web Snippets and Material Design CSS Snippets.", url: Consts.Repo.MaterialVSCodeExtensions.GitHubLink },
+interface SoftwareProduct {
+    name: string
+    description: string
+    kind: "SoftwareSourceCode" | "SoftwareApplication"
+    url: string
+    license: string
+    sameAs?: Array<string>
+    programmingLanguage?: string
+    operatingSystem?: string
+}
+
+const softwareProducts: Array<SoftwareProduct> = [
+    { name: "MDC", description: "An open source component library that follows the Material Design 3 design specifications.", kind: "SoftwareSourceCode", url: Consts.Repo.MDC.GitHubLink, license: Consts.Repo.MDC.LicenseLink, sameAs: [Consts.Repo.MDC.NpmLink], programmingLanguage: "TypeScript" },
+    { name: "Material Design CSS", description: "A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.", kind: "SoftwareSourceCode", url: Consts.Repo.MaterialDesignCSS.GitHubLink, license: Consts.Repo.MaterialDesignCSS.LicenseLink, sameAs: [Consts.Repo.MaterialDesignCSS.NpmLink], programmingLanguage: "CSS" },
+    { name: "MDK", description: "A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.", kind: "SoftwareSourceCode", url: Consts.Repo.MDK.GitHubLink, license: Consts.Repo.MDK.LicenseLink, sameAs: [Consts.Repo.MDK.NpmLink], programmingLanguage: "JavaScript" },
+    { name: "Result", description: "A TypeScript library implementing the Result pattern, type-safe and exception-free error handling.", kind: "SoftwareSourceCode", url: Consts.Repo.Result.GitHubLink, license: Consts.Repo.Result.LicenseLink, sameAs: [Consts.Repo.Result.NpmLink], programmingLanguage: "TypeScript" },
+    { name: "Breakpoint", description: "Responsive viewport and element breakpoint observer, MD3 defaults, RxJS, zero-framework.", kind: "SoftwareSourceCode", url: Consts.Repo.Breakpoint.GitHubLink, license: Consts.Repo.Breakpoint.LicenseLink, sameAs: [Consts.Repo.Breakpoint.NpmLink], programmingLanguage: "TypeScript" },
+    { name: "Document Context", description: "A function-first, DOM-anchored IoC container and reactive state management library for browsers.", kind: "SoftwareSourceCode", url: Consts.Repo.DocumentContext.GitHubLink, license: Consts.Repo.DocumentContext.LicenseLink, sameAs: [Consts.Repo.DocumentContext.NpmLink], programmingLanguage: "TypeScript" },
+    { name: "MCU Helper", description: "High-performance functional engine for Material Design 3 color tokens, dynamic schemes and OLED dark themes.", kind: "SoftwareSourceCode", url: Consts.Repo.MCUHelper.GitHubLink, license: Consts.Repo.MCUHelper.LicenseLink, sameAs: [Consts.Repo.MCUHelper.NpmLink], programmingLanguage: "TypeScript" },
+    { name: "Material Theme CLI", description: "Material Design CLI for generating theme tokens and serialized color outputs from a source color.", kind: "SoftwareSourceCode", url: Consts.Repo.MaterialThemeCLI.GitHubLink, license: Consts.Repo.MaterialThemeCLI.LicenseLink, sameAs: [Consts.Repo.MaterialThemeCLI.NpmLink], programmingLanguage: "TypeScript" },
+    { name: "VSCode Material Theme", description: "Material Design 3 theme for VSCode.", kind: "SoftwareApplication", url: Consts.Repo.VSCodeMaterialTheme.GitHubLink, license: Consts.Repo.VSCodeMaterialTheme.LicenseLink, operatingSystem: "Windows, macOS, Linux" },
+    { name: "OpenCode Material Theme", description: "Material Design 3 themes for the OpenCode TUI, 194 static JSON themes across 9 variants.", kind: "SoftwareApplication", url: Consts.Repo.OpenCodeMaterialTheme.GitHubLink, license: Consts.Repo.OpenCodeMaterialTheme.LicenseLink, sameAs: [Consts.Repo.OpenCodeMaterialTheme.NpmLink], operatingSystem: "macOS, Linux, Windows" },
+    { name: "Zed Material Theme", description: "Material Design 3 themes for Zed, Light, Dark and OLED across 9 variants.", kind: "SoftwareApplication", url: Consts.Repo.ZedMaterialTheme.GitHubLink, license: Consts.Repo.ZedMaterialTheme.LicenseLink, sameAs: [Consts.Repo.ZedMaterialTheme.NpmLink], operatingSystem: "macOS, Linux, Windows" },
+    { name: "Material VSCode Extensions", description: "VSCode snippets: Material Web Snippets and Material Design CSS Snippets.", kind: "SoftwareApplication", url: Consts.Repo.MaterialVSCodeExtensions.GitHubLink, license: Consts.Repo.MaterialVSCodeExtensions.LicenseLink, operatingSystem: "Windows, macOS, Linux" },
 ]
 
-const structuredData = [
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        name: "Sandlada",
-        url: siteUrl,
-        logo: `${siteUrl}/sandlada.svg`,
-        image: `${siteUrl}/sandlada-cover.png`,
-        description: pageDescription,
-        founder: { "@type": "Person", name: "Kai Orion", url: Consts.Member.KaiOrion.GitHubProfileLink },
-        sameAs: [Consts.Social.Twitter.Link, Consts.Social.GitHub.Link, Consts.Social.Npm.Link],
-    },
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: "Sandlada",
-        url: siteUrl,
-        inLanguage: "en",
-        description: pageDescription,
-    },
-    {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        name: "Sandlada open source projects",
-        itemListElement: productList.map((product, index) => ({
-            "@type": "ListItem",
-            position: index + 1,
-            name: product.name,
-            description: product.description,
-            url: product.url,
-        })),
-    },
-]
+const toSoftwareSchema = (product: SoftwareProduct): Record<string, unknown> => {
+    const schema: Record<string, unknown> = {
+        "@type": product.kind,
+        name: product.name,
+        description: product.description,
+        url: product.url,
+        license: product.license,
+    }
+
+    if (product.sameAs) schema.sameAs = product.sameAs
+
+    if (product.kind === "SoftwareSourceCode") {
+        schema.codeRepository = product.url
+        if (product.programmingLanguage) schema.programmingLanguage = product.programmingLanguage
+    } else {
+        schema.applicationCategory = "DeveloperApplication"
+        schema.operatingSystem = product.operatingSystem ?? "Windows, macOS, Linux"
+        schema.offers = { "@type": "Offer", price: "0", priceCurrency: "USD" }
+    }
+
+    return schema
+}
+
+const organizationId = `${siteUrl}/#organization`
+const websiteId = `${siteUrl}/#website`
+
+const structuredData: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Organization",
+            "@id": organizationId,
+            name: "Sandlada",
+            url: `${siteUrl}/`,
+            logo: { "@type": "ImageObject", url: `${siteUrl}/apple-touch-icon.png`, width: 180, height: 180 },
+            image: `${siteUrl}/sandlada-cover.png`,
+            description: pageDescription,
+            founder: { "@type": "Person", name: "Kai Orion", url: Consts.Member.KaiOrion.GitHubProfileLink },
+            sameAs: [Consts.Social.Twitter.Link, Consts.Social.GitHub.Link, Consts.Social.Npm.Link],
+        },
+        {
+            "@type": "WebSite",
+            "@id": websiteId,
+            name: "Sandlada",
+            url: `${siteUrl}/`,
+            inLanguage: "en",
+            description: pageDescription,
+            publisher: { "@id": organizationId },
+        },
+        {
+            "@type": "WebPage",
+            "@id": `${siteUrl}/#webpage`,
+            url: `${siteUrl}/`,
+            name: pageTitle,
+            description: pageDescription,
+            isPartOf: { "@id": websiteId },
+            about: { "@id": organizationId },
+            inLanguage: "en",
+            primaryImageOfPage: { "@type": "ImageObject", url: `${siteUrl}/sandlada-cover.png`, width: 1280, height: 640 },
+        },
+        {
+            "@type": "ItemList",
+            name: "Sandlada open source projects",
+            numberOfItems: softwareProducts.length,
+            itemListElement: softwareProducts.map((product, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: toSoftwareSchema(product),
+            })),
+        },
+    ],
+}
 
 const Banners = [
     {
@@ -247,10 +296,23 @@ const extensionProducts: Array<Product> = [
 
 <RootHTML title={pageTitle} description={pageDescription} structuredData={structuredData}>
 
-    <BrandHeader />
+    <div class="width-protection">
+        <BrandHeader />
+    </div>
 
-    <main class="genie-page" id="page-content">
-        <video id="bg-video" class="bg-video" loop muted autoplay playsinline preload="metadata">
+    <main class="width-protection" id="main-content" tabindex="-1">
+        <video
+            id="bg-video"
+            class="bg-video"
+            loop
+            muted
+            autoplay
+            playsinline
+            preload="metadata"
+            aria-hidden="true"
+            tabindex="-1"
+            disablepictureinpicture
+        >
             <source src="/imgs/code.webm" type="video/webm" />
         </video>
         <script is:inline>
@@ -327,7 +389,7 @@ const extensionProducts: Array<Product> = [
             products={extensionProducts}
         />
 
-        <section class="principles width-container" id="principles" aria-labelledby="principles-title">
+        <section class="principles" id="principles" aria-labelledby="principles-title">
             <h2 class="section-title" id="principles-title">Principles</h2>
             <div class="principles-grid">
                 <article>
@@ -348,7 +410,7 @@ const extensionProducts: Array<Product> = [
 
     <span class="divider" aria-hidden="true"></span>
 
-    <div class="width-container">
+    <div class="width-protection my-8">
         <BrandFooter />
     </div>
 
@@ -363,9 +425,7 @@ const extensionProducts: Array<Product> = [
     }
 
     .width-container {
-        max-width: 840px;
-        margin-left: auto;
-        margin-right: auto;
+
     }
 
     .visually-hidden {
@@ -498,8 +558,8 @@ const extensionProducts: Array<Product> = [
     }
 
     .principles {
-        padding: 44px 12px 68px 12px;
         box-sizing: border-box;
+        margin-block: 96px;
     }
 
     .principles-grid {

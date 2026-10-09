@@ -80,9 +80,7 @@ const headingId = `${id}-title`;
     @reference "../styles/tailwind.css";
     .tile-grid {
         display: block;
-        max-width: 840px;
-        margin: 40px auto 8px auto;
-        padding: 12px;
+        margin: 48px auto 24px;
         box-sizing: border-box;
         scroll-margin-top: 16px;
     }
@@ -110,8 +108,12 @@ const headingId = `${id}-title`;
     .card-grid {
         display: grid;
         grid-template-columns: 1fr;
+
         gap: 12px;
 
+        @media (width >= 540px) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
         @media (width >= 600px) {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
@@ -119,6 +121,18 @@ const headingId = `${id}-title`;
         @media (width >= 840px) {
             grid-template-columns: repeat(3, minmax(0, 1fr));
         }
+
+        @media (width >= 1200px) {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        @media (width >= 1600px) {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+    }
+
+    :root[dark] .product .product-cover {
+        filter: hue-rotate(50deg) invert(1);
     }
 
     .product {
@@ -144,6 +158,7 @@ const headingId = `${id}-title`;
             border-radius: 12px;
             margin-bottom: 16px;
             background-color: var(--md-sys-color-secondary-container);
+            filter: hue-rotate(250deg);
         }
 
         .product-package {
@@ -167,6 +182,9 @@ const headingId = `${id}-title`;
             padding-inline: 16px;
             margin-block: 8px 4px;
             text-wrap: pretty;
+            flex-grow: 1;
+            flex-shrink: 1;
+            overflow: auto;
         }
 
         .product-actions {

@@ -41,7 +41,14 @@ const { banners } = Astro.props;
                                 <md-ripple></md-ripple>
                                 <md-focus-ring></md-focus-ring>
                             </a>
-                            <img class="bg-img" src={banner.image} />
+                            <img
+                                class="bg-img"
+                                src={banner.image}
+                                alt=""
+                                aria-hidden="true"
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </div>
                     </article>
                 ))
@@ -217,12 +224,14 @@ const { banners } = Astro.props;
         display: block;
         margin-bottom: 16px;
         scroll-margin-top: 16px;
+
     }
 
     .showcase-viewport {
         --showcase-card-width: min(82vw, 760px);
         --showcase-gap: 12px;
-
+        border-radius: var(--md-sys-shape-corner-value-extra-large);
+        overflow: clip;
         overflow-x: auto;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
@@ -340,7 +349,7 @@ const { banners } = Astro.props;
 
     .showcase-link {
         all: unset;
-        @apply body-medium bg-secondary-container text-on-secondary-container relative;
+        @apply body-medium bg-secondary text-on-secondary relative;
         cursor: pointer;
         width: fit-content;
         display: inline-flex;

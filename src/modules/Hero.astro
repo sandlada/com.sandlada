@@ -14,7 +14,7 @@ import OpenInBrowserSvg from "@material-design-icons/svg/round/open_in_browser.s
     <span class="body">Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript utilities, and VSCode, Zed and OpenCode themes.</span>
 
     <div class="actions">
-        <a class="button-outlined" target="_blank" rel="noopener" href={Consts.Social.GitHub.Link}>
+        <a class="button-filled" target="_blank" rel="noopener" href={Consts.Social.GitHub.Link}>
             <span>View on GitHub</span>
             <md-icon set:html={OpenInBrowserSvg}></md-icon>
             <md-ripple></md-ripple>
@@ -97,20 +97,7 @@ import OpenInBrowserSvg from "@material-design-icons/svg/round/open_in_browser.s
         margin-bottom: 96px;
         padding: 8px;
 
-        margin-inline: 48px;
 
-        @media (width >= 600px) {
-            margin-inline: 96px;
-        }
-        @media (width >= 840px) {
-            margin-inline: 192px;
-        }
-        @media (width >= 1200px) {
-            margin-inline: 284px;
-        }
-        @media (width >= 1600px) {
-            margin-inline: 368px;
-        }
 
         & h1.title {
             all: unset;
@@ -162,7 +149,7 @@ import OpenInBrowserSvg from "@material-design-icons/svg/round/open_in_browser.s
             gap: 8px;
             margin-block: 24px 24px;
 
-            & a.button-outlined {
+            & a.button-filled {
                 all: unset;
                 position: relative;
                 cursor: pointer;
@@ -176,7 +163,7 @@ import OpenInBrowserSvg from "@material-design-icons/svg/round/open_in_browser.s
                 border-radius: var(--md-sys-shape-corner-value-extra-large);
 
                 fill: currentColor;
-                background: var(--md-sys-color-primary-container);
+                background: var(--md-sys-color-primary);
                 color: var(--md-sys-color-on-primary);
             }
         }
