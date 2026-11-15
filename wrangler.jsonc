@@ -1,0 +1,10 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    // Worker name must be lowercase alphanumeric with dashes only.
+    "name": "com-sandlada",
+    "compatibility_date": "2026-11-15",
+    "assets": {
+        "directory": "./dist",
+        "not_found_handling": "404-page",
+    },
+}
