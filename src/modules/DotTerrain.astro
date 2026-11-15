@@ -1,0 +1,937 @@
+---
+/**
+ * The interactive dot matrix that replaced the homepage background video.
+ *
+ * It is a screen-space port of the OKYCT landing page particle terrain, pushed a
+ * step further for the brand surface: glowing dot sprites, fBm undulation, crest
+ * highlights, a click-driven sonar pulse and a slow field twinkle.
+ *
+ * Rendering is raw WebGL, so no 3D dependency ships with the site.
+ *
+ * Markup contract:
+ * - `[data-dot-terrain]`             fixed, full-viewport backdrop
+ * - `[data-dot-terrain-canvas]`      the WebGL surface
+ * - `[data-dot-probe="<role>"]`      hidden elements whose `color` resolves a theme token
+ */
+interface Props {
+    /** Opacity of the field while the hero is on screen. */
+    baseOpacity?: number
+    /** Scroll distance, in CSS pixels, over which the field fades to `minOpacity`. */
+    fadeDistance?: number
+    /** Opacity the field keeps once the reader has scrolled past the hero. */
+    minOpacity?: number
+}
+
+const { baseOpacity = 0.55, fadeDistance = 900, minOpacity = 0.04 } = Astro.props
+---
+
+<div
+    class="dot-terrain"
+    data-dot-terrain
+    data-base-opacity={baseOpacity}
+    data-fade-distance={fadeDistance}
+    data-min-opacity={minOpacity}
+    aria-hidden="true"
+>
+    <canvas class="dot-terrain-canvas" data-dot-terrain-canvas></canvas>
+
+    <!-- Theme probes: each one resolves a token to a concrete colour, so the shader
+         follows the palette without ever hard-coding a brand value. -->
+    <span class="dot-terrain-probe" data-dot-probe="surface-low"></span>
+    <span class="dot-terrain-probe" data-dot-probe="surface-high"></span>
+    <span class="dot-terrain-probe" data-dot-probe="primary-low"></span>
+    <span class="dot-terrain-probe" data-dot-probe="primary-high"></span>
+    <span class="dot-terrain-probe" data-dot-probe="tertiary-low"></span>
+    <span class="dot-terrain-probe" data-dot-probe="tertiary-high"></span>
+    <span class="dot-terrain-probe" data-dot-probe="highlight-light"></span>
+    <span class="dot-terrain-probe" data-dot-probe="highlight-dark"></span>
+</div>
+
+<style>
+    .dot-terrain {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: clip;
+        pointer-events: none;
+        contain: layout paint style;
+        transition-property: opacity;
+        transition-duration: 160ms;
+        transition-timing-function: linear;
+    }
+
+    .dot-terrain-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    /*
+     * Two glazes on top of the field: one clears the copy in the hero, the other
+     * takes the density down towards the viewport rim so the texture never reads
+     * as a flat printed sheet.
+     */
+    .dot-terrain::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(
+                ellipse 54% 50% at 25% 34%,
+                color-mix(in oklab, var(--md-sys-color-surface) 76%, transparent) 0%,
+                transparent 76%
+            ),
+            radial-gradient(
+                ellipse 110% 92% at 52% 40%,
+                transparent 46%,
+                color-mix(in oklab, var(--md-sys-color-surface) 42%, transparent) 100%
+            );
+    }
+
+    .dot-terrain-probe {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .dot-terrain-probe[data-dot-probe="surface-low"] {
+        color: color-mix(in oklab, var(--md-sys-color-outline-variant) 55%, var(--md-sys-color-on-surface-variant));
+    }
+
+    .dot-terrain-probe[data-dot-probe="surface-high"] {
+        color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .dot-terrain-probe[data-dot-probe="primary-low"] {
+        color: var(--md-sys-color-primary-container);
+    }
+
+    .dot-terrain-probe[data-dot-probe="primary-high"] {
+        color: var(--md-sys-color-primary);
+    }
+
+    .dot-terrain-probe[data-dot-probe="tertiary-low"] {
+        color: var(--md-sys-color-tertiary-container);
+    }
+
+    .dot-terrain-probe[data-dot-probe="tertiary-high"] {
+        color: var(--md-sys-color-tertiary);
+    }
+
+    .dot-terrain-probe[data-dot-probe="highlight-light"] {
+        color: var(--md-sys-color-primary);
+    }
+
+    .dot-terrain-probe[data-dot-probe="highlight-dark"] {
+        color: var(--md-sys-color-primary-fixed);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .dot-terrain {
+            transition: none;
+        }
+    }
+</style>
+
+<script>
+    import { isDark } from "../stores/is-dark"
+
+    type Rgb = [number, number, number]
+
+    /** World units per CSS pixel; keeps the wave length stable on every viewport. */
+    const WorldPerPixel = 0.05
+    /** Distance between the camera and the ground plane, used for the elevation parallax. */
+    const CameraDistance = 40
+    /** Mound, ring and height-field constants, shared with the OKYCT studio terrain. */
+    const MoundFalloff = 0.007
+    const RingOffset = 13
+    const RingFalloff = 0.045
+    /** Sonar pulse: world radius it sweeps, and how long it takes to sweep it. */
+    const PulseRadius = 36
+    const PulseDuration = 1.7
+    const AmbientPulseInterval = 6.5
+    /** Number of hue stops in a role ramp and the total hue drift across it. */
+    const RampSteps = 32
+    const HueDrift = 44
+    const CompactBreakpoint = 768
+    const MaxPixelRatio = 2
+
+    const ProbeKeys = ["surface-low", "surface-high", "primary-low", "primary-high", "tertiary-low", "tertiary-high"] as const
+    type ProbeKey = (typeof ProbeKeys)[number]
+    type ThemePalette = Record<ProbeKey, Rgb>
+
+    /** Used only when a browser cannot resolve a token to a concrete `rgb()` value. */
+    const LightFallbackPalette: ThemePalette = {
+        "surface-low": [0.741, 0.792, 0.729],
+        "surface-high": [0.243, 0.290, 0.243],
+        "primary-low": [0.204, 0.647, 0.318],
+        "primary-high": [0, 0.431, 0.173],
+        "tertiary-low": [0.243, 0.573, 0.965],
+        "tertiary-high": [0, 0.373, 0.690],
+    }
+
+    const DarkFallbackPalette: ThemePalette = {
+        "surface-low": [0.243, 0.290, 0.243],
+        "surface-high": [0.741, 0.792, 0.729],
+        "primary-low": [0.204, 0.647, 0.318],
+        "primary-high": [0.435, 0.867, 0.506],
+        "tertiary-low": [0.243, 0.573, 0.965],
+        "tertiary-high": [0.651, 0.784, 1],
+    }
+
+    const clamp01 = (value: number) => Math.min(1, Math.max(0, value))
+
+    const srgbToLinear = (channel: number) =>
+        channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+
+    const linearToSrgb = (channel: number) =>
+        channel <= 0.0031308 ? channel * 12.92 : 1.055 * channel ** (1 / 2.4) - 0.055
+
+    interface Oklch {
+        readonly lightness: number
+        readonly chroma: number
+        readonly hue: number
+    }
+
+    const toOklch = (rgb: Rgb): Oklch => {
+        const [red, green, blue] = rgb.map(srgbToLinear) as Rgb
+        const l = Math.cbrt(0.4122214708 * red + 0.5363325363 * green + 0.0514459929 * blue)
+        const m = Math.cbrt(0.2119034982 * red + 0.6806995451 * green + 0.1073969566 * blue)
+        const s = Math.cbrt(0.0883024619 * red + 0.2817188376 * green + 0.6299787005 * blue)
+
+        const lightness = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s
+        const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s
+        const b = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
+
+        return {
+            lightness,
+            chroma: Math.hypot(a, b),
+            hue: (Math.atan2(b, a) * 180) / Math.PI,
+        }
+    }
+
+    const oklchToLinear = ({ lightness, chroma, hue }: Oklch): Rgb => {
+        const radians = (hue * Math.PI) / 180
+        const a = Math.cos(radians) * chroma
+        const b = Math.sin(radians) * chroma
+
+        const l = (lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3
+        const m = (lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3
+        const s = (lightness - 0.0894841775 * a - 1.291485548 * b) ** 3
+
+        return [
+            4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+            -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+        ]
+    }
+
+    const isInGamut = ([red, green, blue]: Rgb) =>
+        red >= -0.0005 && red <= 1.0005 && green >= -0.0005 && green <= 1.0005 && blue >= -0.0005 && blue <= 1.0005
+
+    /**
+     * Gamut mapping by chroma reduction only: the hue is never rotated, so a ramp
+     * keeps its identity when it converges on the sRGB boundary.
+     */
+    const fromOklch = (oklch: Oklch): Rgb => {
+        let chroma = Math.max(0, oklch.chroma)
+        let linear = oklchToLinear({ ...oklch, chroma })
+
+        for (let attempt = 0; attempt < 12 && !isInGamut(linear); attempt += 1) {
+            chroma *= 0.82
+            linear = oklchToLinear({ ...oklch, chroma })
+        }
+
+        return [
+            linearToSrgb(clamp01(linear[0])),
+            linearToSrgb(clamp01(linear[1])),
+            linearToSrgb(clamp01(linear[2])),
+        ]
+    }
+
+    interface RoleRamp {
+        readonly low: Array<Rgb>
+        readonly high: Array<Rgb>
+    }
+
+    /** A role ramp keeps the two anchor tones and only drifts the hue across the band. */
+    const buildRoleRamp = (lowAnchor: Rgb, highAnchor: Rgb): RoleRamp => {
+        const low = toOklch(lowAnchor)
+        const high = toOklch(highAnchor)
+        const lowStops: Array<Rgb> = []
+        const highStops: Array<Rgb> = []
+
+        for (let index = 0; index < RampSteps; index += 1) {
+            const progress = index / (RampSteps - 1)
+            const hue = (high.hue + (progress - 0.5) * HueDrift + 360) % 360
+            lowStops.push(fromOklch({ lightness: low.lightness, chroma: low.chroma, hue }))
+            highStops.push(fromOklch({ lightness: high.lightness, chroma: high.chroma, hue }))
+        }
+
+        return { low: lowStops, high: highStops }
+    }
+
+    const createColorReader = () => {
+        const canvas = document.createElement("canvas")
+        canvas.width = 1
+        canvas.height = 1
+        const context = canvas.getContext("2d", { willReadFrequently: true })
+        if (!context) return () => null
+
+        return (color: string): Rgb | null => {
+            // An unsupported colour leaves the previous fill style untouched, which is
+            // exactly how we detect a probe that could not be resolved.
+            context.fillStyle = "#ffffff"
+            context.fillStyle = color
+            if (context.fillStyle === "#ffffff") return null
+
+            context.clearRect(0, 0, 1, 1)
+            context.fillRect(0, 0, 1, 1)
+            const [red, green, blue] = context.getImageData(0, 0, 1, 1).data
+            return [red / 255, green / 255, blue / 255]
+        }
+    }
+
+    const readThemePalette = (root: HTMLElement, readColor: ReturnType<typeof createColorReader>): ThemePalette => {
+        const fallback = document.documentElement.hasAttribute("dark") ? DarkFallbackPalette : LightFallbackPalette
+        const palette = { ...fallback }
+
+        for (const key of ProbeKeys) {
+            const probe = root.querySelector<HTMLElement>(`[data-dot-probe="${key}"]`)
+            const resolved = probe ? readColor(getComputedStyle(probe).color) : null
+            if (resolved) palette[key] = resolved
+        }
+
+        return palette
+    }
+
+    const readHighlight = (root: HTMLElement, readColor: ReturnType<typeof createColorReader>, isDarkMode: boolean): Rgb => {
+        const key = isDarkMode ? "highlight-dark" : "highlight-light"
+        const probe = root.querySelector<HTMLElement>(`[data-dot-probe="${key}"]`)
+        const resolved = probe ? readColor(getComputedStyle(probe).color) : null
+        if (resolved) return resolved
+        return isDarkMode ? [0.545, 0.980, 0.608] : [0, 0.431, 0.173]
+    }
+
+    const VertexShader = `
+        precision highp float;
+
+        attribute vec2 aPosition;
+        attribute float aSize;
+        attribute float aPhase;
+        attribute vec3 aSurfaceLow;
+        attribute vec3 aSurfaceHigh;
+        attribute vec3 aPrimaryLow;
+        attribute vec3 aPrimaryHigh;
+        attribute vec3 aTertiaryLow;
+        attribute vec3 aTertiaryHigh;
+
+        uniform float uTime;
+        uniform vec2 uPointer;
+        uniform float uPointerStrength;
+        uniform vec2 uViewport;
+        uniform float uWorldPerPixel;
+        uniform float uPixelRatio;
+        uniform float uDotScale;
+        uniform vec2 uPulseOrigin;
+        uniform float uPulseProgress;
+
+        varying vec3 vColor;
+        varying float vToneMix;
+        varying float vLight;
+        varying float vGlow;
+        varying float vTwinkle;
+
+        float terrainHeight(vec2 point, float time) {
+            float height = sin(point.x * 0.22 + time * 0.6) * cos(point.y * 0.19 - time * 0.5) * 1.6;
+            height += sin(point.x * 0.47 - point.y * 0.31 + time * 0.95) * 0.6;
+            height += cos(point.y * 0.66 + point.x * 0.14 + time * 1.25) * 0.32;
+            height += sin(point.x * 1.13 - point.y * 0.91 + time * 1.9) * 0.05;
+            return height;
+        }
+
+        void main() {
+            float height = terrainHeight(aPosition, uTime);
+
+            float pointerDistance = distance(aPosition, uPointer);
+            float moundFalloff = exp(-pointerDistance * pointerDistance * ${MoundFalloff});
+            float breathe = 0.9 + 0.12 * sin(uTime * 1.2);
+            float moundHeight = moundFalloff * 4.6 * breathe * uPointerStrength;
+            height += moundHeight;
+
+            vec2 moundGradient = -2.0 * ${MoundFalloff} * (aPosition - uPointer) * moundHeight;
+
+            // Click sonar: one ring that travels out, lifts the surface and then dies.
+            float pulseProgress = clamp(uPulseProgress, 0.0, 1.0);
+            float pulseActive = step(0.0, uPulseProgress);
+            float pulseDistance = distance(aPosition, uPulseOrigin);
+            float pulseOffset = pulseDistance - pulseProgress * ${PulseRadius.toFixed(1)};
+            float pulseWeight = exp(-pulseOffset * pulseOffset * 0.05) * (1.0 - pulseProgress) * pulseActive;
+            height += pulseWeight * 2.2;
+
+            // Finite-difference normals turn the travelling wave into readable ridges.
+            float sampleOffset = 0.4;
+            float heightLeft = terrainHeight(aPosition + vec2(-sampleOffset, 0.0), uTime);
+            float heightRight = terrainHeight(aPosition + vec2(sampleOffset, 0.0), uTime);
+            float heightDown = terrainHeight(aPosition + vec2(0.0, -sampleOffset), uTime);
+            float heightUp = terrainHeight(aPosition + vec2(0.0, sampleOffset), uTime);
+
+            float lighting = clamp(
+                0.5 + (heightLeft - heightRight) * 0.5 + (heightDown - heightUp) * 0.35
+                    + (moundGradient.x * 0.55 + moundGradient.y * 0.75) * 1.6
+                    + pulseWeight * 0.45,
+                0.0,
+                1.0
+            );
+
+            // The camera looks straight down, so elevation reads as a small radial
+            // push away from the view centre - the only perspective cue we need.
+            float parallax = 1.0 / max(0.55, 1.0 - height * ${1 / CameraDistance});
+            vec2 pixelOffset = (aPosition / uWorldPerPixel) * parallax;
+            vec2 clip = vec2(pixelOffset.x / (uViewport.x * 0.5), -pixelOffset.y / (uViewport.y * 0.5));
+            gl_Position = vec4(clip, 0.0, 1.0);
+
+            float relief = clamp(height * 0.34 + 0.5, 0.0, 1.0);
+            float twinkle = 0.9 + 0.1 * sin(uTime * 1.6 + aPhase * 6.2831);
+            float sparkle = step(0.988, aPhase) * (0.55 + 0.45 * sin(uTime * 2.1 + aPhase * 33.0));
+
+            // The sprite is drawn far larger than the dot: the fragment shader keeps a
+            // crisp core inside a wide halo, which is what gives the field its bloom.
+            float sprite = uDotScale * aSize * uPixelRatio
+                * (0.6 + 0.85 * relief)
+                * (0.8 + 0.4 * lighting)
+                * (twinkle + sparkle * 0.4)
+                * (0.9 + 0.1 * parallax);
+            gl_PointSize = clamp(sprite * 2.4, 3.2 * uPixelRatio, 24.0 * uPixelRatio);
+
+            vToneMix = clamp((height + 2.3) / 4.6, 0.0, 1.0);
+            vLight = lighting;
+            vTwinkle = twinkle;
+
+            float primaryWeight = exp(-pointerDistance * pointerDistance * ${MoundFalloff}) * uPointerStrength;
+            float ringDistance = pointerDistance - ${RingOffset.toFixed(1)};
+            float ringWeight = exp(-ringDistance * ringDistance * ${RingFalloff}) * uPointerStrength * (1.0 - primaryWeight);
+            float surfaceWeight = max(0.0, 1.0 - primaryWeight - ringWeight);
+            vec3 lowColor = aSurfaceLow * surfaceWeight + aPrimaryLow * primaryWeight + aTertiaryLow * ringWeight;
+            vec3 highColor = aSurfaceHigh * surfaceWeight + aPrimaryHigh * primaryWeight + aTertiaryHigh * ringWeight;
+
+            // Even away from the pointer the ridges pick up a little of the primary
+            // ramp, so the whole field carries the brand hue instead of staying neutral.
+            float crest = smoothstep(0.56, 0.98, vToneMix);
+            lowColor = mix(lowColor, aPrimaryLow, crest * 0.12 * surfaceWeight);
+            highColor = mix(highColor, aPrimaryHigh, crest * 0.24 * surfaceWeight);
+
+            vColor = mix(lowColor, highColor, smoothstep(0.12, 0.9, vToneMix));
+            vColor = mix(vColor, aTertiaryHigh, clamp(pulseWeight * 0.45, 0.0, 1.0));
+
+            vGlow = clamp(
+                crest * lighting * 0.62
+                    + primaryWeight * 0.5
+                    + ringWeight * 0.8
+                    + pulseWeight * 0.9
+                    + sparkle * 0.28,
+                0.0,
+                1.0
+            );
+        }
+    `
+
+    const FragmentShader = `
+        precision mediump float;
+
+        uniform float uOpacity;
+        uniform float uHalo;
+        uniform vec3 uHighlight;
+
+        varying vec3 vColor;
+        varying float vToneMix;
+        varying float vLight;
+        varying float vGlow;
+        varying float vTwinkle;
+
+        void main() {
+            vec2 offset = gl_PointCoord - vec2(0.5);
+            float radius = length(offset);
+            if (radius > 0.5) discard;
+
+            // Crisp core plus a wide falloff: reads as a lit particle, not a decal.
+            float core = smoothstep(0.24, 0.13, radius);
+            float halo = pow(smoothstep(0.5, 0.14, radius), 2.4) * uHalo;
+            float shape = core + halo;
+            if (shape <= 0.002) discard;
+
+            float heightMix = smoothstep(0.12, 0.92, vToneMix);
+            float alpha = clamp(
+                shape
+                    * (0.55 + 0.45 * heightMix)
+                    * (0.7 + 0.3 * vLight)
+                    * (0.92 + 0.08 * vTwinkle)
+                    * uOpacity,
+                0.0,
+                1.0
+            );
+
+            vec3 color = mix(vColor, uHighlight, clamp(vGlow * 0.34, 0.0, 0.7));
+
+            // Premultiplied output: the canvas is composited over the page surface.
+            gl_FragColor = vec4(color * alpha, alpha);
+        }
+    `
+
+    const compileShader = (gl: WebGLRenderingContext, type: number, source: string) => {
+        const shader = gl.createShader(type)
+        if (!shader) return null
+
+        gl.shaderSource(shader, source)
+        gl.compileShader(shader)
+        if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader
+
+        console.warn("[dot-terrain] shader compilation failed", gl.getShaderInfoLog(shader))
+        gl.deleteShader(shader)
+        return null
+    }
+
+    const createProgram = (gl: WebGLRenderingContext) => {
+        const vertexShader = compileShader(gl, gl.VERTEX_SHADER, VertexShader)
+        const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, FragmentShader)
+        if (!vertexShader || !fragmentShader) return null
+
+        const program = gl.createProgram()
+        if (!program) return null
+
+        gl.attachShader(program, vertexShader)
+        gl.attachShader(program, fragmentShader)
+        gl.linkProgram(program)
+        gl.deleteShader(vertexShader)
+        gl.deleteShader(fragmentShader)
+
+        if (gl.getProgramParameter(program, gl.LINK_STATUS)) return program
+
+        console.warn("[dot-terrain] program link failed", gl.getProgramInfoLog(program))
+        gl.deleteProgram(program)
+        return null
+    }
+
+    const UniformNames = [
+        "uTime",
+        "uPointer",
+        "uPointerStrength",
+        "uViewport",
+        "uWorldPerPixel",
+        "uPixelRatio",
+        "uDotScale",
+        "uOpacity",
+        "uHalo",
+        "uHighlight",
+        "uPulseOrigin",
+        "uPulseProgress",
+    ] as const
+    type UniformName = (typeof UniformNames)[number]
+
+    const AttributeNames = [
+        "aPosition",
+        "aSize",
+        "aPhase",
+        "aSurfaceLow",
+        "aSurfaceHigh",
+        "aPrimaryLow",
+        "aPrimaryHigh",
+        "aTertiaryLow",
+        "aTertiaryHigh",
+    ] as const
+    type AttributeName = (typeof AttributeNames)[number]
+
+    type UniformLocations = Record<UniformName, WebGLUniformLocation | null>
+    type AttributeLocations = Record<AttributeName, number>
+
+    const startTerrain = (root: HTMLElement) => {
+        const canvas = root.querySelector<HTMLCanvasElement>("[data-dot-terrain-canvas]")
+        if (!canvas) return () => {}
+
+        const gl = canvas.getContext("webgl", {
+            alpha: true,
+            antialias: true,
+            premultipliedAlpha: true,
+            powerPreference: "high-performance",
+        })
+        if (!gl) return () => {}
+
+        const program = createProgram(gl)
+        if (!program) return () => {}
+
+        const uniforms = Object.fromEntries(
+            UniformNames.map((name) => [name, gl.getUniformLocation(program, name)]),
+        ) as UniformLocations
+
+        const attributes = Object.fromEntries(
+            AttributeNames.map((name) => [name, gl.getAttribLocation(program, name)]),
+        ) as AttributeLocations
+
+        const readColor = createColorReader()
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        const fadeDistance = Math.max(1, Number(root.dataset.fadeDistance ?? 900))
+        const baseOpacity = clamp01(Number(root.dataset.baseOpacity ?? 0.55))
+        const minOpacity = clamp01(Number(root.dataset.minOpacity ?? 0.04))
+
+        const buffers = new Map<AttributeName, WebGLBuffer>()
+        const startDark = document.documentElement.hasAttribute("dark")
+        let palette = readThemePalette(root, readColor)
+        let highlight = readHighlight(root, readColor, startDark)
+        let halo = startDark ? 0.44 : 0.3
+        let bodyOpacity = startDark ? 0.86 : 0.94
+        let ramps = {
+            surface: buildRoleRamp(palette["surface-low"], palette["surface-high"]),
+            primary: buildRoleRamp(palette["primary-low"], palette["primary-high"]),
+            tertiary: buildRoleRamp(palette["tertiary-low"], palette["tertiary-high"]),
+        }
+
+        let vertexCount = 0
+        let width = 0
+        let height = 0
+        let dotScale = 3.0
+
+        let pointerTargetX = 0
+        let pointerTargetZ = 0
+        let pointerTargetStrength = 0
+        let pointerX = 0
+        let pointerZ = 0
+        let pointerStrength = 0
+        let hasUserPointer = false
+        let idleTime = 0
+
+        let pulseOriginX = 0
+        let pulseOriginZ = 0
+        let pulseProgress = -1
+
+        let elapsed = 0
+        let lastTime = 0
+        let animationFrame = 0
+        let running = false
+        let scrollFrame = 0
+
+        const writeAttribute = (name: AttributeName, data: Float32Array, size: number, mode: number) => {
+            const location = attributes[name]
+            if (location < 0) return
+
+            const previous = buffers.get(name)
+            if (previous) gl.deleteBuffer(previous)
+
+            const buffer = gl.createBuffer()
+            if (!buffer) return
+
+            buffers.set(name, buffer)
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+            gl.bufferData(gl.ARRAY_BUFFER, data, mode)
+            gl.enableVertexAttribArray(location)
+            gl.vertexAttribPointer(location, size, gl.FLOAT, false, 0, 0)
+        }
+
+        /** Rebuilds the dot grid and every per-dot colour attribute for the current size. */
+        const uploadGrid = () => {
+            const compact = width < CompactBreakpoint
+            const spacing = compact ? 18 : 22
+            const margin = spacing * 9
+            const columns = Math.ceil((width + margin * 2) / spacing) + 1
+            const rows = Math.ceil((height + margin * 2) / spacing) + 1
+            const count = columns * rows
+
+            const positions = new Float32Array(count * 2)
+            const sizes = new Float32Array(count)
+            const phases = new Float32Array(count)
+            const surfaceLow = new Float32Array(count * 3)
+            const surfaceHigh = new Float32Array(count * 3)
+            const primaryLow = new Float32Array(count * 3)
+            const primaryHigh = new Float32Array(count * 3)
+            const tertiaryLow = new Float32Array(count * 3)
+            const tertiaryHigh = new Float32Array(count * 3)
+
+            const originX = ((columns - 1) * spacing) / 2
+            const originY = ((rows - 1) * spacing) / 2
+            let cursor = 0
+
+            for (let row = 0; row < rows; row += 1) {
+                const depthProgress = rows === 1 ? 0 : row / (rows - 1)
+                const pixelY = row * spacing - originY
+
+                for (let column = 0; column < columns; column += 1) {
+                    const lateralProgress = columns === 1 ? 0 : column / (columns - 1)
+                    const pixelX = column * spacing - originX
+
+                    positions[cursor * 2] = pixelX * WorldPerPixel
+                    positions[cursor * 2 + 1] = pixelY * WorldPerPixel
+
+                    // Neighbouring dots take neighbouring ramp stops, which keeps the
+                    // colour band continuous instead of stepping between roles. The band
+                    // stays shallow so the wave, not the diagonal, carries the contrast.
+                    const progress = clamp01(0.24 + 0.52 * (lateralProgress * 0.72 + depthProgress * 0.28))
+                    const stop = Math.min(RampSteps - 1, Math.round(progress * (RampSteps - 1)))
+
+                    const write = (target: Float32Array, stops: Array<Rgb>) => {
+                        const color = stops[stop]
+                        target[cursor * 3] = color[0]
+                        target[cursor * 3 + 1] = color[1]
+                        target[cursor * 3 + 2] = color[2]
+                    }
+
+                    write(surfaceLow, ramps.surface.low)
+                    write(surfaceHigh, ramps.surface.high)
+                    write(primaryLow, ramps.primary.low)
+                    write(primaryHigh, ramps.primary.high)
+                    write(tertiaryLow, ramps.tertiary.low)
+                    write(tertiaryHigh, ramps.tertiary.high)
+
+                    sizes[cursor] = 0.9 + Math.random() * 0.2
+                    phases[cursor] = Math.random()
+                    cursor += 1
+                }
+            }
+
+            writeAttribute("aPosition", positions, 2, gl.STATIC_DRAW)
+            writeAttribute("aSize", sizes, 1, gl.STATIC_DRAW)
+            writeAttribute("aPhase", phases, 1, gl.STATIC_DRAW)
+            writeAttribute("aSurfaceLow", surfaceLow, 3, gl.STATIC_DRAW)
+            writeAttribute("aSurfaceHigh", surfaceHigh, 3, gl.STATIC_DRAW)
+            writeAttribute("aPrimaryLow", primaryLow, 3, gl.STATIC_DRAW)
+            writeAttribute("aPrimaryHigh", primaryHigh, 3, gl.STATIC_DRAW)
+            writeAttribute("aTertiaryLow", tertiaryLow, 3, gl.STATIC_DRAW)
+            writeAttribute("aTertiaryHigh", tertiaryHigh, 3, gl.STATIC_DRAW)
+
+            vertexCount = count
+            dotScale = compact ? 2.4 : 2.8
+        }
+        const syncViewport = () => {
+            const nextWidth = Math.max(1, Math.round(root.clientWidth))
+            const nextHeight = Math.max(1, Math.round(root.clientHeight))
+            if (nextWidth === width && nextHeight === height) return
+
+            width = nextWidth
+            height = nextHeight
+
+            const pixelRatio = Math.min(window.devicePixelRatio || 1, MaxPixelRatio)
+            canvas.width = Math.round(width * pixelRatio)
+            canvas.height = Math.round(height * pixelRatio)
+            gl.viewport(0, 0, canvas.width, canvas.height)
+
+            if (uniforms.uViewport) gl.uniform2f(uniforms.uViewport, width, height)
+            if (uniforms.uWorldPerPixel) gl.uniform1f(uniforms.uWorldPerPixel, WorldPerPixel)
+            if (uniforms.uPixelRatio) gl.uniform1f(uniforms.uPixelRatio, pixelRatio)
+
+            uploadGrid()
+        }
+        const rebuildPalette = () => {
+            const dark = document.documentElement.hasAttribute("dark")
+            palette = readThemePalette(root, readColor)
+            highlight = readHighlight(root, readColor, dark)
+            halo = dark ? 0.44 : 0.3
+            bodyOpacity = dark ? 0.86 : 0.94
+            ramps = {
+                surface: buildRoleRamp(palette["surface-low"], palette["surface-high"]),
+                primary: buildRoleRamp(palette["primary-low"], palette["primary-high"]),
+                tertiary: buildRoleRamp(palette["tertiary-low"], palette["tertiary-high"]),
+            }
+            uploadGrid()
+            renderOnce()
+        }
+        const render = () => {
+            if (uniforms.uTime) gl.uniform1f(uniforms.uTime, elapsed)
+            if (uniforms.uPointer) gl.uniform2f(uniforms.uPointer, pointerX, pointerZ)
+            if (uniforms.uPointerStrength) gl.uniform1f(uniforms.uPointerStrength, pointerStrength)
+            if (uniforms.uDotScale) gl.uniform1f(uniforms.uDotScale, dotScale)
+            if (uniforms.uOpacity) gl.uniform1f(uniforms.uOpacity, bodyOpacity)
+            if (uniforms.uHalo) gl.uniform1f(uniforms.uHalo, halo)
+            if (uniforms.uHighlight) gl.uniform3f(uniforms.uHighlight, highlight[0], highlight[1], highlight[2])
+            if (uniforms.uPulseOrigin) gl.uniform2f(uniforms.uPulseOrigin, pulseOriginX, pulseOriginZ)
+            if (uniforms.uPulseProgress) gl.uniform1f(uniforms.uPulseProgress, pulseProgress)
+
+            gl.clear(gl.COLOR_BUFFER_BIT)
+            gl.drawArrays(gl.POINTS, 0, vertexCount)
+        }
+        const renderOnce = () => {
+            syncViewport()
+            render()
+        }
+
+        const triggerPulse = (worldX: number, worldZ: number) => {
+            if (reducedMotion) return
+            pulseOriginX = worldX
+            pulseOriginZ = worldZ
+            pulseProgress = 0
+        }
+
+        const animate = (time: number) => {
+            if (!running) return
+
+            const delta = lastTime === 0 ? 1 / 60 : Math.min(0.05, (time - lastTime) / 1000)
+            lastTime = time
+            elapsed += delta
+
+            // Before the first pointer movement a ghost pointer tours the field so the
+            // terrain never looks broken where the hero copy hides the real cursor.
+            if (!hasUserPointer) {
+                pointerTargetX = Math.cos(elapsed * 0.23) * 9
+                pointerTargetZ = Math.sin(elapsed * 0.31) * 6
+                pointerTargetStrength = 0.65
+
+                idleTime += delta
+                if (idleTime > AmbientPulseInterval) {
+                    idleTime = 0
+                    triggerPulse(
+                        Math.cos(elapsed * 0.37) * 14,
+                        Math.sin(elapsed * 0.53) * 9,
+                    )
+                }
+            }
+
+            if (pulseProgress >= 0) {
+                pulseProgress += delta / PulseDuration
+                if (pulseProgress > 1) pulseProgress = -1
+            }
+
+            const ease = 1 - Math.exp(-6 * delta)
+            let stepX = (pointerTargetX - pointerX) * ease
+            let stepZ = (pointerTargetZ - pointerZ) * ease
+            const stepLength = Math.hypot(stepX, stepZ)
+            const maxStep = 40 * delta
+            if (stepLength > maxStep) {
+                const ratio = maxStep / stepLength
+                stepX *= ratio
+                stepZ *= ratio
+            }
+            pointerX += stepX
+            pointerZ += stepZ
+            pointerStrength += (pointerTargetStrength - pointerStrength) * (1 - Math.exp(-3.5 * delta))
+
+            render()
+            animationFrame = window.requestAnimationFrame(animate)
+        }
+
+        const startLoop = () => {
+            if (running || reducedMotion) return
+            running = true
+            lastTime = 0
+            animationFrame = window.requestAnimationFrame(animate)
+        }
+        const stopLoop = () => {
+            if (!running) return
+            running = false
+            window.cancelAnimationFrame(animationFrame)
+        }
+
+        let currentOpacity = baseOpacity
+        const updateFade = () => {
+            const progress = clamp01(window.scrollY / fadeDistance)
+            currentOpacity = baseOpacity + (minOpacity - baseOpacity) * progress * progress
+            root.style.opacity = currentOpacity.toFixed(3)
+
+            const shouldRun = !reducedMotion && !document.hidden && currentOpacity > minOpacity + 0.02
+            if (shouldRun) startLoop()
+            else stopLoop()
+        }
+
+        const handleScroll = () => {
+            if (scrollFrame !== 0) return
+            scrollFrame = window.requestAnimationFrame(() => {
+                scrollFrame = 0
+                updateFade()
+            })
+        }
+
+        const handlePointerMove = (event: PointerEvent) => {
+            const rect = canvas.getBoundingClientRect()
+            if (event.clientX < rect.left || event.clientX > rect.right
+                || event.clientY < rect.top || event.clientY > rect.bottom) {
+                pointerTargetStrength = 0
+                return
+            }
+
+            hasUserPointer = true
+            pointerTargetX = (event.clientX - rect.left - width / 2) * WorldPerPixel
+            pointerTargetZ = (event.clientY - rect.top - height / 2) * WorldPerPixel
+            pointerTargetStrength = 1
+        }
+
+        const handlePointerDown = (event: PointerEvent) => {
+            triggerPulse(
+                (event.clientX - width / 2) * WorldPerPixel,
+                (event.clientY - height / 2) * WorldPerPixel,
+            )
+        }
+
+        const handlePointerLeave = () => {
+            pointerTargetStrength = 0
+        }
+
+        const handleVisibility = () => {
+            if (document.hidden) stopLoop()
+            else updateFade()
+        }
+
+        const handleContextLost = (event: Event) => {
+            event.preventDefault()
+            stopLoop()
+        }
+
+        gl.useProgram(program)
+        gl.enable(gl.BLEND)
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
+        gl.disable(gl.DEPTH_TEST)
+        gl.clearColor(0, 0, 0, 0)
+
+        const resizeObserver = new ResizeObserver(renderOnce)
+        resizeObserver.observe(root)
+
+        window.addEventListener("pointermove", handlePointerMove, { passive: true })
+        window.addEventListener("pointerdown", handlePointerDown, { passive: true })
+        window.addEventListener("scroll", handleScroll, { passive: true })
+        document.addEventListener("pointerleave", handlePointerLeave)
+        window.addEventListener("blur", handlePointerLeave)
+        document.addEventListener("visibilitychange", handleVisibility)
+        canvas.addEventListener("webglcontextlost", handleContextLost)
+
+        renderOnce()
+        updateFade()
+
+        // Subscribed after the first frame: the atom replays its current value on
+        // subscribe, and rebuilding the grid before it has a size would waste a buffer.
+        const unsubscribe = isDark.subscribe(() => rebuildPalette())
+
+        return () => {
+            stopLoop()
+            if (scrollFrame !== 0) window.cancelAnimationFrame(scrollFrame)
+            resizeObserver.disconnect()
+            unsubscribe()
+            window.removeEventListener("pointermove", handlePointerMove)
+            window.removeEventListener("pointerdown", handlePointerDown)
+            window.removeEventListener("scroll", handleScroll)
+            document.removeEventListener("pointerleave", handlePointerLeave)
+            window.removeEventListener("blur", handlePointerLeave)
+            document.removeEventListener("visibilitychange", handleVisibility)
+            canvas.removeEventListener("webglcontextlost", handleContextLost)
+
+            for (const buffer of buffers.values()) gl.deleteBuffer(buffer)
+            buffers.clear()
+            gl.deleteProgram(program)
+            gl.getExtension("WEBGL_lose_context")?.loseContext()
+        }
+    }
+
+    let stopTerrain: (() => void) | undefined
+
+    const mountTerrain = () => {
+        stopTerrain?.()
+        stopTerrain = undefined
+
+        const root = document.querySelector<HTMLElement>("[data-dot-terrain]")
+        if (!root) return
+
+        stopTerrain = startTerrain(root)
+    }
+
+    document.addEventListener("astro:before-swap", () => {
+        stopTerrain?.()
+        stopTerrain = undefined
+    })
+    document.addEventListener("astro:page-load", mountTerrain)
+</script>

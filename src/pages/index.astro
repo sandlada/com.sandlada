@@ -1,15 +1,17 @@
 ---
 import BrandFooter from "@modules/BrandFooter.astro"
 import BrandHeader from "@modules/BrandHeader.astro"
+import DotTerrain from "@modules/DotTerrain.astro"
 import Hero from "@modules/Hero.astro"
 import RootHTML from "@modules/html-structure/RootHTML.astro"
 import ProductGrid, { type Product } from "@modules/ProductGrid.astro"
 import ScrollingBanner, { type Banner } from "@modules/ScrollingBanner.astro"
+import { ReleaseEntries } from "../data/releases"
 import { Consts } from "@sandlada/consts.js"
 
 const siteUrl = "https://sandlada.com"
 const pageTitle = "Sandlada – Material Design UI, TS Libraries & Themes"
-const pageDescription = "Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript utilities, a color engine, and VSCode, Zed and OpenCode themes."
+const pageDescription = "Sandlada is an open-source team building Material Design 3 UI libraries, TypeScript and C# utilities, a perceptual color engine, and VSCode, Zed and OpenCode themes."
 
 interface SoftwareProduct {
     name: string
@@ -23,6 +25,8 @@ interface SoftwareProduct {
 }
 
 const softwareProducts: Array<SoftwareProduct> = [
+    { name: "OKYCT", description: "A perceptual OKLab color space and MD3 theme engine for emissive displays.", kind: "SoftwareSourceCode", url: ReleaseEntries.Okyct.GitHubLink, license: ReleaseEntries.Okyct.LicenseLink, sameAs: [ReleaseEntries.Okyct.NpmLink, ReleaseEntries.Okyct.WebsiteLink], programmingLanguage: "TypeScript" },
+    { name: "RopSharp", description: "Railway-oriented programming for modern C#: immutable Result, Option and Either structs.", kind: "SoftwareSourceCode", url: ReleaseEntries.RopSharp.GitHubLink, license: ReleaseEntries.RopSharp.LicenseLink, sameAs: [ReleaseEntries.RopSharp.NuGetLink], programmingLanguage: "C#" },
     { name: "MDC", description: "An open source component library that follows the Material Design 3 design specifications.", kind: "SoftwareSourceCode", url: Consts.Repo.MDC.GitHubLink, license: Consts.Repo.MDC.LicenseLink, sameAs: [Consts.Repo.MDC.NpmLink], programmingLanguage: "TypeScript" },
     { name: "Material Design CSS", description: "A CSS package for Material Design tokens: Color, Palette, Motion, Shape, Spacing, Typography and prebuilt themes.", kind: "SoftwareSourceCode", url: Consts.Repo.MaterialDesignCSS.GitHubLink, license: Consts.Repo.MaterialDesignCSS.LicenseLink, sameAs: [Consts.Repo.MaterialDesignCSS.NpmLink], programmingLanguage: "CSS" },
     { name: "MDK", description: "A JavaScript library based on Material Design 3, providing data such as color, shape, shadow level, etc.", kind: "SoftwareSourceCode", url: Consts.Repo.MDK.GitHubLink, license: Consts.Repo.MDK.LicenseLink, sameAs: [Consts.Repo.MDK.NpmLink], programmingLanguage: "JavaScript" },
@@ -183,6 +187,18 @@ const uiLibraryProducts: Array<Product> = [
 
 const tsJsLibraryProducts: Array<Product> = [
     {
+        visual: "primary",
+        packageName: ReleaseEntries.Okyct.FormalName,
+        title: ReleaseEntries.Okyct.DisplayName,
+        description: "A perceptual OKLab color space and MD3 theme engine for emissive displays: zero-hue-drift gamut mapping, APCA contrast and OLED tones.",
+        coverSrc: "/covers/okyct.svg",
+        coverAlt: "Glowing OKYCT wordmark for the perceptual color engine",
+        actions: [
+            { label: "GitHub", href: ReleaseEntries.Okyct.GitHubLink },
+            { label: "NPM", href: ReleaseEntries.Okyct.NpmLink, variant: "text" },
+        ],
+    },
+    {
         visual: "secondary",
         packageName: Consts.Repo.Result.FormalName,
         title: "Result",
@@ -244,6 +260,21 @@ const tsJsLibraryProducts: Array<Product> = [
     },
 ]
 
+const csLibraryProducts: Array<Product> = [
+    {
+        visual: "primary",
+        packageName: ReleaseEntries.RopSharp.FormalName,
+        title: ReleaseEntries.RopSharp.DisplayName,
+        description: "Railway-oriented programming for modern C#: immutable Result, Option and Either structs, structured errors and cancellation-aware async combinators.",
+        coverSrc: "/covers/ropsharp.svg",
+        coverAlt: "Glowing RopSharp wordmark for the C# railway-oriented library",
+        actions: [
+            { label: "GitHub", href: ReleaseEntries.RopSharp.GitHubLink },
+            { label: "NuGet", href: ReleaseEntries.RopSharp.NuGetLink, variant: "text" },
+        ],
+    },
+]
+
 const extensionProducts: Array<Product> = [
     {
         visual: "tertiary",
@@ -301,54 +332,7 @@ const extensionProducts: Array<Product> = [
     </div>
 
     <main class="width-protection" id="main-content" tabindex="-1">
-        <video
-            id="bg-video"
-            class="bg-video"
-            loop
-            muted
-            autoplay
-            playsinline
-            preload="metadata"
-            aria-hidden="true"
-            tabindex="-1"
-            disablepictureinpicture
-        >
-            <source src="/imgs/code.webm" type="video/webm" />
-        </video>
-        <script is:inline>
-            const SCROLL_LIMIT = 500
-            const OPACITY_LIMIT = 200
-            const toOpacity = (value, max = SCROLL_LIMIT) => {
-                return OPACITY_LIMIT - (value / max * 100)
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const video = document.querySelector('#bg-video')
-
-                window.addEventListener('scroll', (e) => {
-                    const position = (e.currentTarget).scrollY
-                    video.style.opacity = `${Math.max(5, toOpacity(position))}%`
-                }, { passive: true, })
-            })
-        </script>
-        <style>
-            .bg-video {
-                position: fixed;
-                inset: 0;
-                z-index: -1;
-                width: 100dvw;
-                height: 100dvh;
-                object-fit: cover;
-                filter: hue-rotate(-85deg);
-                transition-property: opacity;
-                transition-duration: 200ms;
-            }
-            :root[dark] {
-                .bg-video {
-                    filter: invert(100%) hue-rotate(85deg);
-                }
-            }
-        </style>
+        <DotTerrain />
 
         <Hero></Hero>
 
@@ -361,6 +345,7 @@ const extensionProducts: Array<Product> = [
         <nav class="section-tabs width-container" aria-label="Product categories">
             <a href="#ui-library">UI Library</a>
             <a href="#ts-js-library">TS / JS Library</a>
+            <a href="#cs-library">C# / .NET Library</a>
             <a href="#extensions">Extensions</a>
             <a href="#principles">Principles</a>
         </nav>
@@ -379,6 +364,14 @@ const extensionProducts: Array<Product> = [
             title="Simulating logic"
             description="Generate vibrant ecosystems, from error handling to reactive state."
             products={tsJsLibraryProducts}
+        />
+
+        <!-- C#/.NET Library -->
+        <ProductGrid
+            id="cs-library"
+            title="Crossing runtimes"
+            description="Carry the same values-over-exceptions discipline into .NET — immutable structs, no reflection, AOT ready."
+            products={csLibraryProducts}
         />
 
         <!-- Extensions -->
